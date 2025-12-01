@@ -1,12 +1,14 @@
 
 import { LucideIcon } from 'lucide-react';
 
+// Navigation Item Structure
 export interface NavItem {
   id: string;
   label: string;
   icon: LucideIcon;
 }
 
+// Global Application Configuration
 export interface AppConfig {
   heroTitle: string;
   heroHighlight: string;
@@ -14,6 +16,7 @@ export interface AppConfig {
   heroLabel: string;
 }
 
+// Home Page Module (Bento Grid Card)
 export interface HomeModule {
   id: string;
   title: string;
@@ -25,6 +28,7 @@ export interface HomeModule {
   colSpan?: number; 
 }
 
+// Product Variant (SKU)
 export interface ProductVariant {
   name: string;
   chip: string;
@@ -33,6 +37,7 @@ export interface ProductVariant {
   formFactor: string;
 }
 
+// Key Feature Highlight
 export interface ProductFeature {
   label: string;
   value: string;
@@ -40,6 +45,7 @@ export interface ProductFeature {
   iconKey?: string;
 }
 
+// Full Product/Platform Data Definition
 export interface ProductData {
   id: string;
   series: string;
@@ -52,6 +58,7 @@ export interface ProductData {
   keyFeatures?: ProductFeature[];
 }
 
+// Performance Chart Data Point
 export interface ChartData {
   name: string;
   value?: number;
@@ -61,6 +68,7 @@ export interface ChartData {
   fill?: string;
 }
 
+// Core Concept Definition (RDMA/NVMe)
 export interface ConceptData {
   id: string;
   title: string;
@@ -70,14 +78,14 @@ export interface ConceptData {
   features: string[];
 }
 
-// --- New Interfaces for Strict Typing ---
-
+// Protocol Mechanism (PFC, ECN, etc.)
 export interface ProtocolMechanism {
   name: string;
   desc: string;
   iconKey: string;
 }
 
+// Protocol Concept (RoCE vs UET)
 export interface ProtocolConcept {
   id: string;
   title: string;
@@ -88,12 +96,14 @@ export interface ProtocolConcept {
   mechanisms: ProtocolMechanism[];
 }
 
+// HPC Checklist Item
 export interface HPCItem {
   title: string;
   iconKey: string;
   points: string[];
 }
 
+// Roadmap/Future Improvement Item
 export interface FutureItem {
   title: string;
   desc: string;

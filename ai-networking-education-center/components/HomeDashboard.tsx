@@ -15,6 +15,7 @@ const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
   }
 };
 
+// Static color lookups for Tailwind classes
 const COLOR_VARIANTS: Record<string, { bg: string, border: string, text: string, glow: string, ring: string, hoverBg: string }> = {
   blue: { bg: 'bg-blue-500/10', border: 'border-blue-500/20', text: 'text-blue-400', glow: 'bg-blue-500/10', ring: 'text-blue-500', hoverBg: 'group-hover:bg-blue-500' },
   purple: { bg: 'bg-purple-500/10', border: 'border-purple-500/20', text: 'text-purple-400', glow: 'bg-purple-500/10', ring: 'text-purple-500', hoverBg: 'group-hover:bg-purple-500' },
@@ -24,6 +25,12 @@ const COLOR_VARIANTS: Record<string, { bg: string, border: string, text: string,
   emerald: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-400', glow: 'bg-emerald-500/10', ring: 'text-emerald-500', hoverBg: 'group-hover:bg-emerald-500' },
 };
 
+/**
+ * Dashboard Card Component
+ * 
+ * Represents a single module in the bento grid.
+ * Features hover lift, inner glow, and animated progress rings.
+ */
 const DashboardCard: React.FC<{
   title: string;
   subtitle: string;

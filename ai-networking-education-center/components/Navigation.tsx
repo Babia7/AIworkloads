@@ -4,6 +4,18 @@ import { NAVIGATION } from '../constants';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { motion } from 'framer-motion';
 
+/**
+ * Global Navigation Component
+ * 
+ * Renders two elements:
+ * 1. A Fixed Brand Indicator (Top Left)
+ * 2. A Floating "Dock" (Bottom Center)
+ * 
+ * Features:
+ * - Active State: Uses IntersectionObserver (via useActiveSection hook) to highlight the current section.
+ * - Smooth Scroll: Intercepts clicks to use JS-based scrolling.
+ * - Fluid Morphing: Uses Framer Motion's `layoutId` to animate the active background pill.
+ */
 const Navigation: React.FC = () => {
   const navIds = NAVIGATION.map(n => n.id);
   // Default to 'intro' if no section is active (e.g. top of page)
@@ -53,7 +65,7 @@ const Navigation: React.FC = () => {
                 className="group relative px-4 py-3 rounded-full transition-colors flex items-center justify-center shrink-0 z-10"
                 aria-label={item.label}
               >
-                {/* Liquid Active Background */}
+                {/* Liquid Active Background (Shared Layout Animation) */}
                 {isActive && (
                   <motion.div
                     layoutId="active-pill"

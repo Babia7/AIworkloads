@@ -6,7 +6,17 @@ import {
 } from '../constants';
 import { ProductData, AppConfig, HomeModule, ChartData } from '../types';
 
-// Define the shape of our full application state
+/**
+ * DataContext Architecture
+ * 
+ * This context acts as a "Client-Side CMS". 
+ * 1. Initialization: It loads data from LocalStorage if available.
+ * 2. Fallback: If no data exists (or version mismatch), it falls back to `constants.ts`.
+ * 3. Persistence: Any changes made via the Admin Dashboard are saved to LocalStorage.
+ * 
+ * This allows the Admin to edit the site live in the browser without a real backend database.
+ */
+
 interface DataContextType {
   // Global Config
   appConfig: AppConfig;
@@ -48,7 +58,7 @@ interface DataContextType {
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
-// Initial HPC Checklist Data
+// Initial HPC Checklist Data (Default State)
 const INITIAL_HPC_CHECKLIST = [
     {
         title: "Collective Acceleration",
@@ -97,17 +107,38 @@ const INITIAL_HPC_CHECKLIST = [
     }
 ];
 
-// Helper to safely load state with version check
+/**
+ * Helper: Safely load state with Versioning and Type Checking.
+ * 
+ * Checks 'app_version' in localStorage. If it doesn't match the current code version,
+ * it ignores the stored data and returns the default fallback. 
+ * This prevents white-screen crashes when we update the data schema.
+ * 
+ * Update: Added explicit null/undefined checks for parsed data.
+ */
 const loadState = <T,>(key: string, fallback: T): T => {
   try {
     const version = localStorage.getItem('app_version');
-    if (version !== '3.0') {
+    if (version !== '3.2') { // Current Schema Version
       return fallback;
     }
     const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : fallback;
+    if (!saved) return fallback;
+    
+    const parsed = JSON.parse(saved);
+    
+    // Critical Safety Check: JSON.parse("null") returns null, which crashes map() functions
+    if (parsed === null || parsed === undefined) return fallback;
+    
+    // Type Safety: If fallback is array, ensure parsed is array
+    if (Array.isArray(fallback) && !Array.isArray(parsed)) return fallback;
+    
+    // Type Safety: If fallback is object (not array), ensure parsed is object
+    if (typeof fallback === 'object' && !Array.isArray(fallback) && (typeof parsed !== 'object' || Array.isArray(parsed))) return fallback;
+
+    return parsed;
   } catch (e) {
-    console.warn(`Failed to load ${key}, using fallback.`);
+    console.warn(`Failed to load ${key}, using fallback.`, e);
     return fallback;
   }
 };
@@ -125,7 +156,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [protocolConcepts, setProtocolConcepts] = useState<any[]>(() => loadState('app_protocols', PROTOCOL_CONCEPTS));
   const [hpcChecklist, setHpcChecklist] = useState<any[]>(() => loadState('app_hpc_checklist', INITIAL_HPC_CHECKLIST));
 
-  // Persistence Effects
+  // Persistence Effects: Save to LocalStorage on every change
   useEffect(() => { localStorage.setItem('app_glossary', JSON.stringify(glossary)); }, [glossary]);
   useEffect(() => { localStorage.setItem('app_products', JSON.stringify(products)); }, [products]);
   useEffect(() => { localStorage.setItem('app_future', JSON.stringify(futureImprovements)); }, [futureImprovements]);
@@ -136,12 +167,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => { localStorage.setItem('app_protocols', JSON.stringify(protocolConcepts)); }, [protocolConcepts]);
   useEffect(() => { localStorage.setItem('app_hpc_checklist', JSON.stringify(hpcChecklist)); }, [hpcChecklist]);
   
-  // Set version on mount to confirm successful load
+  // Set version on mount to confirm successful load for next visit
   useEffect(() => {
-    localStorage.setItem('app_version', '3.0');
+    localStorage.setItem('app_version', '3.2');
   }, []);
 
-  // Actions
+  // Update Actions
   const updateGlossary = (val: any) => setGlossary(val);
   const updateProducts = (val: any) => setProducts(val);
   const updateFutureImprovements = (val: any) => setFutureImprovements(val);
@@ -152,12 +183,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateProtocolConcepts = (val: any) => setProtocolConcepts(val);
   const updateHpcChecklist = (val: any) => setHpcChecklist(val);
 
+  /**
+   * Reset System
+   * Clears LocalStorage and reloads the page to restore initial 'constants.ts' state.
+   */
   const resetToDefaults = () => {
     if (window.confirm('Are you sure you want to reset all data to factory defaults? This cannot be undone.')) {
       localStorage.clear();
-      localStorage.setItem('app_version', '3.0');
-      
-      // Force reload to clear state cleanly
+      localStorage.setItem('app_version', '3.2');
       window.location.reload();
     }
   };

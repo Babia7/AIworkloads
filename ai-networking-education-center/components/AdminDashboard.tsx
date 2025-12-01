@@ -12,6 +12,17 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
+/**
+ * Admin Dashboard Container
+ * 
+ * Provides a secure (PIN-protected) environment to edit the application's
+ * data via the DataContext.
+ * 
+ * Features:
+ * - Simple client-side authentication.
+ * - Tabbed navigation for different data categories.
+ * - Integration with sub-editor components (in /admin/AdminEditors.tsx).
+ */
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
   const { 
     glossary, updateGlossary, 
@@ -32,6 +43,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    // In a real app, this should validate against a backend hash.
     if (password === '19901991') {
       setIsAuthenticated(true);
     } else {
@@ -62,7 +74,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Auth or Content */}
+        {/* Content Area: Auth Form or Main Dashboard */}
         {!isAuthenticated ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-[#0F1117] to-[#0F1117]">
             <form onSubmit={handleLogin} className="w-full max-w-sm space-y-6">
@@ -91,7 +103,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
         ) : (
           <div className="flex-1 flex overflow-hidden">
             
-            {/* Sidebar */}
+            {/* Sidebar Navigation */}
             <div className="w-72 bg-[#0d1117] border-r border-white/5 flex flex-col overflow-y-auto">
               <nav className="p-4 space-y-8 flex-1">
                 
@@ -117,6 +129,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
 
               </nav>
 
+              {/* System Actions */}
               <div className="p-4 border-t border-white/5 space-y-2 bg-[#0d1117]">
                 <button 
                   onClick={resetToDefaults}
@@ -133,7 +146,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Main Editor Area */}
+            {/* Main Editor View */}
             <div className="flex-1 bg-[#161b22] overflow-y-auto p-8 relative">
               <div className="max-w-5xl mx-auto pb-20">
                   {activeTab === 'config' && <ConfigEditor config={appConfig} onUpdate={updateAppConfig} />}

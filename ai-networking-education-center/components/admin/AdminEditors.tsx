@@ -7,7 +7,16 @@ import {
   HPCItem, ProductData, FutureCategory 
 } from '../../types';
 
+/**
+ * ADMIN EDITORS
+ * 
+ * This file contains the sub-components used within the AdminDashboard.
+ * Each component corresponds to a specific data slice (Products, Config, etc.)
+ * and provides UI for CRUD operations.
+ */
+
 // --- Global Config Editor ---
+// Edits site-wide text (Titles, Subtitles).
 export const ConfigEditor: React.FC<{ config: AppConfig, onUpdate: (c: AppConfig) => void }> = ({ config, onUpdate }) => {
   const handleChange = (key: keyof AppConfig, val: string) => {
     onUpdate({ ...config, [key]: val });
@@ -49,6 +58,7 @@ export const ConfigEditor: React.FC<{ config: AppConfig, onUpdate: (c: AppConfig
 };
 
 // --- Home Layout Editor ---
+// Allows reordering and editing of the Home Page Bento Grid modules.
 export const LayoutEditor: React.FC<{ modules: HomeModule[], onUpdate: (m: HomeModule[]) => void }> = ({ modules = [], onUpdate }) => {
   const handleChange = (idx: number, field: keyof HomeModule, val: any) => {
     const next = [...modules];
@@ -132,6 +142,7 @@ export const LayoutEditor: React.FC<{ modules: HomeModule[], onUpdate: (m: HomeM
 };
 
 // --- Performance Editor ---
+// Edits values for the Bandwidth and Failover charts.
 export const PerformanceEditor: React.FC<{ perfData: ChartData[], failData: ChartData[], onUpdatePerf: (d: ChartData[]) => void, onUpdateFail: (d: ChartData[]) => void }> = ({ perfData = [], failData = [], onUpdatePerf, onUpdateFail }) => {
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
@@ -190,6 +201,7 @@ export const PerformanceEditor: React.FC<{ perfData: ChartData[], failData: Char
 };
 
 // --- Protocols Editor ---
+// Edits the descriptions and mechanisms for RoCEv2 vs UET.
 export const ProtocolEditor: React.FC<{ protocols: ProtocolConcept[], onUpdate: (p: ProtocolConcept[]) => void }> = ({ protocols = [], onUpdate }) => {
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
@@ -234,6 +246,7 @@ export const ProtocolEditor: React.FC<{ protocols: ProtocolConcept[], onUpdate: 
 };
 
 // --- HPC Checklist Editor ---
+// Edits the pain points in the AI vs HPC section.
 export const HPCEditor: React.FC<{ checklist: HPCItem[], onUpdate: (c: HPCItem[]) => void }> = ({ checklist = [], onUpdate }) => {
     const availableIcons = Object.keys(ICON_MAP).sort();
 
@@ -281,6 +294,7 @@ export const HPCEditor: React.FC<{ checklist: HPCItem[], onUpdate: (c: HPCItem[]
 };
 
 // --- Product Editor ---
+// Edits the Hardware Spec sheets and Variants.
 export const ProductsEditor: React.FC<{ products: ProductData[], onUpdate: (p: ProductData[]) => void }> = ({ products = [], onUpdate }) => {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
@@ -369,6 +383,7 @@ export const ProductsEditor: React.FC<{ products: ProductData[], onUpdate: (p: P
 };
 
 // --- Glossary Editor ---
+// Adds or removes terms from the global dictionary.
 export const GlossaryEditor: React.FC<{ glossary: Record<string, string>, onUpdate: (g: Record<string, string>) => void }> = ({ glossary = {}, onUpdate }) => {
   const [newTerm, setNewTerm] = React.useState('');
   const [newDef, setNewDef] = React.useState('');
@@ -442,6 +457,7 @@ export const GlossaryEditor: React.FC<{ glossary: Record<string, string>, onUpda
 };
 
 // --- Future Editor ---
+// Edits the internal roadmap.
 export const FutureEditor: React.FC<{ data: FutureCategory[], onUpdate: (d: FutureCategory[]) => void }> = ({ data = [], onUpdate }) => {
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">

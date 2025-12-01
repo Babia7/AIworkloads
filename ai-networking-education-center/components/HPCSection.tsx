@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Share2, Grid, Clock, AlertTriangle, Zap } from 'lucide-react';
+import { Share2, Grid, Clock, AlertTriangle, Zap, Network, GitGraph, Activity } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
 import { ICON_MAP } from '../constants';
 
@@ -46,18 +46,18 @@ const HPCSection: React.FC = () => {
 
         <div className="mb-12 border-b border-white/5 pb-4">
             <h3 className="text-2xl font-bold text-white mb-2">The Big Differences</h3>
-            <p className="text-slate-500 text-sm font-mono uppercase">Traffic Patterns & Sensitivity</p>
+            <p className="text-slate-500 text-sm font-mono uppercase">Deep dive into Traffic, Congestion, and Topology</p>
         </div>
 
-        {/* Traffic Pattern Visuals (Keep Static as they are complex visuals) */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-24">
+        {/* 1. Traffic Pattern Visuals */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
             {/* AI Side */}
             <div className="bg-[#161b22] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
                 <div className="p-1 bg-gradient-to-r from-blue-600 to-cyan-400 opacity-20"></div>
                 <div className="p-8 flex-1">
                     <div className="flex justify-between items-start mb-8">
                         <div>
-                            <div className="text-cyan-400 font-mono text-xs uppercase tracking-wider mb-2">AI Workloads</div>
+                            <div className="text-cyan-400 font-mono text-xs uppercase tracking-wider mb-2">Traffic Pattern</div>
                             <h3 className="text-2xl font-bold text-white">All-to-All Collective</h3>
                         </div>
                         <div className="p-3 bg-cyan-900/20 rounded-lg text-cyan-400">
@@ -89,7 +89,7 @@ const HPCSection: React.FC = () => {
                     <ul className="space-y-4">
                         <li className="flex gap-4 items-start text-sm text-slate-300">
                             <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_5px_rgba(34,211,238,0.5)]"></div>
-                            <span><strong className="text-white">Heavy Sync:</strong> Every GPU talks to every other GPU.</span>
+                            <span><strong className="text-white">Heavy Sync:</strong> Every GPU talks to every other GPU (All-Reduce).</span>
                         </li>
                     </ul>
                 </div>
@@ -101,7 +101,7 @@ const HPCSection: React.FC = () => {
                 <div className="p-8 flex-1">
                     <div className="flex justify-between items-start mb-8">
                         <div>
-                            <div className="text-amber-500 font-mono text-xs uppercase tracking-wider mb-2">HPC Workloads</div>
+                            <div className="text-amber-500 font-mono text-xs uppercase tracking-wider mb-2">Traffic Pattern</div>
                             <h3 className="text-2xl font-bold text-white">Domain Specific</h3>
                         </div>
                         <div className="p-3 bg-amber-900/20 rounded-lg text-amber-500">
@@ -125,6 +125,174 @@ const HPCSection: React.FC = () => {
                         <li className="flex gap-4 items-start text-sm text-slate-300">
                             <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></div>
                             <span><strong className="text-white">Structured:</strong> Nearest-neighbor or predictable grid patterns.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {/* 2. Congestion & Completion Time */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+            {/* AI Side */}
+            <div className="bg-[#161b22] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
+                <div className="p-1 bg-gradient-to-r from-blue-600 to-cyan-400 opacity-20"></div>
+                <div className="p-8 flex-1">
+                    <div className="flex justify-between items-start mb-8">
+                        <div>
+                            <div className="text-cyan-400 font-mono text-xs uppercase tracking-wider mb-2">Completion Time</div>
+                            <h3 className="text-2xl font-bold text-white">The "Straggler" Effect</h3>
+                        </div>
+                        <div className="p-3 bg-cyan-900/20 rounded-lg text-cyan-400">
+                            <Clock size={24} />
+                        </div>
+                    </div>
+                    
+                    {/* Visual: Barrier Sync */}
+                    <div className="h-40 bg-[#0d1117] rounded-xl border border-white/5 mb-8 relative flex items-center px-8 gap-4">
+                        <div className="absolute right-12 h-full w-1 bg-white/20 border-r border-dashed border-white/30"></div>
+                        <div className="absolute right-12 top-4 text-[10px] text-slate-500 font-mono rotate-90 origin-top-right">BARRIER</div>
+                        
+                        <div className="flex-1 flex flex-col gap-3">
+                            {/* Fast Jobs */}
+                            <div className="h-2 w-[80%] bg-cyan-500/50 rounded-full relative"></div>
+                            <div className="h-2 w-[82%] bg-cyan-500/50 rounded-full relative"></div>
+                            <div className="h-2 w-[79%] bg-cyan-500/50 rounded-full relative"></div>
+                            {/* Straggler */}
+                            <div className="h-2 w-[40%] bg-red-500 rounded-full relative animate-pulse flex items-center">
+                                <span className="absolute left-full ml-2 text-[10px] text-red-400 font-bold whitespace-nowrap">Straggler!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul className="space-y-4">
+                        <li className="flex gap-4 items-start text-sm text-slate-300">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0"></div>
+                            <span><strong className="text-white">Barrier Sync:</strong> If GPU 4 is slow, all 1024 GPUs wait.</span>
+                        </li>
+                        <li className="flex gap-4 items-start text-sm text-slate-300">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></div>
+                            <span><strong className="text-white">Tail Latency:</strong> The network's 99th percentile latency dictates cluster performance.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {/* HPC Side */}
+            <div className="bg-[#161b22] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
+                <div className="p-1 bg-gradient-to-r from-amber-500 to-orange-600 opacity-20"></div>
+                <div className="p-8 flex-1">
+                    <div className="flex justify-between items-start mb-8">
+                        <div>
+                            <div className="text-amber-500 font-mono text-xs uppercase tracking-wider mb-2">Completion Time</div>
+                            <h3 className="text-2xl font-bold text-white">Graceful Tolerance</h3>
+                        </div>
+                        <div className="p-3 bg-amber-900/20 rounded-lg text-amber-500">
+                            <Activity size={24} />
+                        </div>
+                    </div>
+
+                    {/* Visual: Independent Jobs */}
+                    <div className="h-40 bg-[#0d1117] rounded-xl border border-white/5 mb-8 relative flex items-center px-8 gap-4">
+                        <div className="flex-1 flex flex-col gap-3">
+                            <div className="h-2 w-[90%] bg-amber-500/50 rounded-full relative"><span className="absolute right-0 -top-2 text-[8px] text-amber-500">Done</span></div>
+                            <div className="h-2 w-[40%] bg-amber-500/50 rounded-full relative"></div>
+                            <div className="h-2 w-[70%] bg-amber-500/50 rounded-full relative"></div>
+                            <div className="h-2 w-[20%] bg-amber-500/50 rounded-full relative"></div>
+                        </div>
+                    </div>
+
+                    <ul className="space-y-4">
+                        <li className="flex gap-4 items-start text-sm text-slate-300">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></div>
+                            <span><strong className="text-white">Independent Tasks:</strong> Workloads often run as decoupled simulations.</span>
+                        </li>
+                        <li className="flex gap-4 items-start text-sm text-slate-300">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></div>
+                            <span><strong className="text-white">Tolerant:</strong> One slow node doesn't necessarily stall the entire job.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {/* 3. Topology & Scale */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-24">
+            {/* AI Side */}
+            <div className="bg-[#161b22] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
+                <div className="p-1 bg-gradient-to-r from-blue-600 to-cyan-400 opacity-20"></div>
+                <div className="p-8 flex-1">
+                    <div className="flex justify-between items-start mb-8">
+                        <div>
+                            <div className="text-cyan-400 font-mono text-xs uppercase tracking-wider mb-2">Topology</div>
+                            <h3 className="text-2xl font-bold text-white">Fat-Tree / Clos</h3>
+                        </div>
+                        <div className="p-3 bg-cyan-900/20 rounded-lg text-cyan-400">
+                            <GitGraph size={24} />
+                        </div>
+                    </div>
+                    
+                    <div className="bg-[#0d1117] p-4 rounded-xl border border-white/5 mb-6 text-center">
+                        <div className="flex justify-center mb-2">
+                            {/* Abstract Tree */}
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="flex gap-4"><div className="w-8 h-2 bg-cyan-500/50 rounded"></div><div className="w-8 h-2 bg-cyan-500/50 rounded"></div></div>
+                                <div className="w-full h-px bg-cyan-500/20"></div>
+                                <div className="flex gap-2"><div className="w-6 h-2 bg-slate-700 rounded"></div><div className="w-6 h-2 bg-slate-700 rounded"></div><div className="w-6 h-2 bg-slate-700 rounded"></div><div className="w-6 h-2 bg-slate-700 rounded"></div></div>
+                            </div>
+                        </div>
+                        <p className="text-xs text-slate-500 font-mono mt-2">Optimized for Any-to-Any</p>
+                    </div>
+
+                    <ul className="space-y-4">
+                        <li className="flex gap-4 items-start text-sm text-slate-300">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0"></div>
+                            <span><strong className="text-white">Zero Oversubscription:</strong> Non-blocking bandwidth is critical.</span>
+                        </li>
+                        <li className="flex gap-4 items-start text-sm text-slate-300">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0"></div>
+                            <span><strong className="text-white">Network Functions:</strong> Needs RoCEv2, ECN, and SmartNICs.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {/* HPC Side */}
+            <div className="bg-[#161b22] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
+                <div className="p-1 bg-gradient-to-r from-amber-500 to-orange-600 opacity-20"></div>
+                <div className="p-8 flex-1">
+                    <div className="flex justify-between items-start mb-8">
+                        <div>
+                            <div className="text-amber-500 font-mono text-xs uppercase tracking-wider mb-2">Topology</div>
+                            <h3 className="text-2xl font-bold text-white">Torus / Dragonfly</h3>
+                        </div>
+                        <div className="p-3 bg-amber-900/20 rounded-lg text-amber-500">
+                            <Network size={24} />
+                        </div>
+                    </div>
+
+                    <div className="bg-[#0d1117] p-4 rounded-xl border border-white/5 mb-6 text-center">
+                        <div className="flex justify-center mb-2">
+                            {/* Abstract Torus */}
+                            <div className="grid grid-cols-3 gap-2">
+                                <div className="w-4 h-4 border border-amber-500/50 rounded-full"></div>
+                                <div className="w-4 h-4 border border-amber-500/50 rounded-full"></div>
+                                <div className="w-4 h-4 border border-amber-500/50 rounded-full"></div>
+                                <div className="w-4 h-4 border border-amber-500/50 rounded-full"></div>
+                                <div className="w-4 h-4 border border-amber-500/50 rounded-full"></div>
+                                <div className="w-4 h-4 border border-amber-500/50 rounded-full"></div>
+                            </div>
+                        </div>
+                        <p className="text-xs text-slate-500 font-mono mt-2">Optimized for Neighbor Traffic</p>
+                    </div>
+
+                    <ul className="space-y-4">
+                        <li className="flex gap-4 items-start text-sm text-slate-300">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></div>
+                            <span><strong className="text-white">Domain Mapped:</strong> Topology often mimics the physical simulation (e.g., weather grid).</span>
+                        </li>
+                        <li className="flex gap-4 items-start text-sm text-slate-300">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></div>
+                            <span><strong className="text-white">Tech:</strong> Historically MPI + InfiniBand, though converging to Ethernet.</span>
                         </li>
                     </ul>
                 </div>

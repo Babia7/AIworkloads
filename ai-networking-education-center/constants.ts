@@ -4,10 +4,20 @@ import {
 } from 'lucide-react';
 import { AppConfig, HomeModule } from './types';
 
-// 1. Icon Mapping for Serialization (LocalStorage support)
+/**
+ * ICON MAPPING
+ * 
+ * Why this exists:
+ * We cannot save React Components (functions) to LocalStorage via JSON.stringify().
+ * Instead, we store a string key (e.g., "Server") in the data.
+ * Components use this map to resolve the string key back to the actual Lucide Icon component at runtime.
+ */
 export const ICON_MAP: Record<string, any> = {
   CircuitBoard, Server, Network, ShieldCheck, Activity, Zap, Layers, Globe, Radio, GitMerge, AlertCircle, ArrowLeftRight, Database, Cpu, Leaf, Palette, Code, Lightbulb, Grid, Home, Layout, GitCompare, BarChart2, HardDrive, Rocket, Microscope, Terminal, BookOpen, Smartphone, Search, Download, Eye, Keyboard, Settings, Moon, Sun, Type, MousePointer, Maximize, Minimize, List, CheckSquare, Video, Mic, Cloud, Flag, Share2, Save
 };
+
+// --- Initial Data States ---
+// These constants are loaded into the DataContext on first launch or reset.
 
 export const DEFAULT_APP_CONFIG: AppConfig = {
   heroLabel: "Interactive Learning Module",

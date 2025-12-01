@@ -1,6 +1,14 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+
+/**
+ * Application Entry Point
+ * 
+ * Mounts the React application to the DOM.
+ * Utilizes React 18's createRoot API for concurrent rendering features.
+ */
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

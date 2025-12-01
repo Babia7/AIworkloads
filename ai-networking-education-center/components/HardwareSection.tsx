@@ -6,6 +6,7 @@ import { ICON_MAP } from '../constants';
 import GlossaryTerm from './GlossaryTerm';
 
 // Helper component to parse text and auto-wrap known glossary terms
+// This ensures that even dynamic content from the admin panel gets tooltips.
 const DescriptionRenderer: React.FC<{ text: string }> = ({ text }) => {
   // List of high-value terms to auto-highlight in this specific section
   const termsToHighlight = ['Radix', 'VOQ', 'LPO', 'Deep Buffers', 'Tomahawk', 'Jericho', 'PCIe', 'Fabric', 'Leaf', 'Spine', 'CLOS'];
@@ -33,7 +34,7 @@ const HardwareSection: React.FC = () => {
   const { products } = useData();
   const [activeProduct, setActiveProduct] = useState(products[0]);
 
-  // Update active product if data changes
+  // Update active product if data changes (e.g. from Admin edit)
   useEffect(() => {
     if (products.length > 0 && activeProduct) {
        // Try to keep the same product active by ID, else fallback to first

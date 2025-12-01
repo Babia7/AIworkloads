@@ -9,10 +9,23 @@ interface Packet {
   type: 'data' | 'pfc';
 }
 
+/**
+ * Protocol Deep Dive: RoCEv2 Flow Control Simulator
+ * 
+ * This component visualizes how Priority Flow Control (PFC) works.
+ * 
+ * ARCHITECTURE NOTE:
+ * Instead of using React state for the simulation loop (which would cause excessive re-renders),
+ * we use a `useRef` based "Game Loop" pattern.
+ * 1. `simState` Ref: Holds the true physics state (packet positions, buffer levels).
+ * 2. `requestAnimationFrame`: Updates `simState` ~60 times per second.
+ * 3. `setUiState`: Syncs the React UI to the Ref state on every frame to render the visual updates.
+ */
+
 const ProtocolDeepDive: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   
-  // State for UI rendering ONLY
+  // State for UI rendering ONLY (The view)
   const [uiState, setUiState] = useState({
       bufferLevel: 20,
       isCongested: false,
@@ -20,7 +33,7 @@ const ProtocolDeepDive: React.FC = () => {
       packets: [] as Packet[]
   });
 
-  // Simulation State (Single Source of Truth)
+  // Simulation State (Single Source of Truth - The model)
   const simState = useRef({
     bufferLevel: 20,
     isCongested: false,
@@ -32,12 +45,16 @@ const ProtocolDeepDive: React.FC = () => {
   const packetIdRef = useRef(0);
   const isMounted = useRef(true);
 
-  // Static constants (Reverted from dynamic config)
+  // Physics Constants
   const BUFFER_THRESHOLD = 80;
   const BUFFER_DRAIN_RATE = 0.5;
   const PACKET_SPEED = 1.5;
   const PFC_SPEED = 3;
 
+  /**
+   * Main Physics Loop
+   * Executed on every animation frame.
+   */
   const animate = () => {
     if (!isMounted.current) return;
 
@@ -67,7 +84,7 @@ const ProtocolDeepDive: React.FC = () => {
     // Drain Buffer
     state.bufferLevel = Math.max(state.bufferLevel - BUFFER_DRAIN_RATE, 0);
 
-    // Logic: Resume if buffer low
+    // Logic: Resume if buffer low (Hysteresis)
     if (state.senderPaused && state.bufferLevel < 40) {
         state.senderPaused = false;
     }
