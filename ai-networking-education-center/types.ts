@@ -56,6 +56,7 @@ export interface ProductData {
   scale: string;
   variants?: ProductVariant[];
   keyFeatures?: ProductFeature[];
+  datasheetUrl?: string;
 }
 
 // Performance Chart Data Point
@@ -76,6 +77,21 @@ export interface ConceptData {
   description: string;
   iconKey: string;
   features: string[];
+}
+
+// Scaling Concept (Scale Up/Out/Across)
+export interface ScalingConcept {
+  title: string;
+  desc: string;
+  details: string;
+  iconKey: string;
+}
+
+// Comparison Table Row
+export interface ComparisonRow {
+  feature: string;
+  legacy: string;
+  pinnacle: string;
 }
 
 // Protocol Mechanism (PFC, ECN, etc.)
@@ -115,4 +131,13 @@ export interface FutureCategory {
   color: string;
   iconKey: string;
   items: FutureItem[];
+}
+
+// User Feedback Item
+export interface FeedbackItem {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  timestamp: number;
 }
