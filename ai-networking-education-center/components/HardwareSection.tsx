@@ -4,6 +4,7 @@ import { useData } from '../contexts/DataContext';
 import { ChevronRight, Info, Server, ExternalLink } from 'lucide-react';
 import { ICON_MAP } from '../constants';
 import GlossaryTerm from './GlossaryTerm';
+import { sanitizeUrl } from '../utils/sanitize';
 
 // Helper component to parse text and auto-wrap known glossary terms
 // This ensures that even dynamic content from the admin panel gets tooltips.
@@ -130,10 +131,10 @@ const HardwareSection: React.FC = () => {
                         <DescriptionRenderer text={activeProduct.desc} />
                         
                         {/* Datasheet Link */}
-                        {activeProduct.datasheetUrl && (
-                            <a 
-                                href={activeProduct.datasheetUrl} 
-                                target="_blank" 
+                        {sanitizeUrl(activeProduct.datasheetUrl) && (
+                            <a
+                                href={sanitizeUrl(activeProduct.datasheetUrl)}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-cyan-950/20 border border-cyan-500/20 rounded hover:bg-cyan-900/30 hover:border-cyan-500/40 transition-colors text-cyan-400 text-xs font-bold font-mono uppercase tracking-wide group"
                             >

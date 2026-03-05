@@ -15,11 +15,13 @@ interface AdminDashboardProps {
   onClose: () => void;
 }
 
+const MAX_LOGIN_ATTEMPTS = 5;
+
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
-  const { 
-    glossary, updateGlossary, 
-    products, updateProducts, 
-    futureImprovements, updateFutureImprovements, 
+  const {
+    glossary, updateGlossary,
+    products, updateProducts,
+    futureImprovements, updateFutureImprovements,
     appConfig, updateAppConfig,
     homeModules, updateHomeModules,
     performanceData, updatePerformanceData,
@@ -29,17 +31,28 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
     scalingConcepts, updateScalingConcepts,
     coreConcepts, updateCoreConcepts,
     comparisonTable, updateComparisonTable,
-    resetToDefaults 
+    resetToDefaults
   } = useData();
-  
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState<AdminTab>('config');
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const isLockedOut = failedAttempts >= MAX_LOGIN_ATTEMPTS;
 
   const handleLogin = (password: string) => {
-    if (password === '19901991') {
+    if (isLockedOut) return;
+    const adminPin = import.meta.env.VITE_ADMIN_PIN;
+    if (adminPin && password === adminPin) {
       setIsAuthenticated(true);
+      setFailedAttempts(0);
     } else {
-      alert('Access Denied');
+      const next = failedAttempts + 1;
+      setFailedAttempts(next);
+      if (next >= MAX_LOGIN_ATTEMPTS) {
+        alert('Too many failed attempts. The admin panel has been locked for this session.');
+      } else {
+        alert(`Access Denied. ${MAX_LOGIN_ATTEMPTS - next} attempt(s) remaining.`);
+      }
     }
   };
 
@@ -67,7 +80,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
 
         {/* Content Area */}
         {!isAuthenticated ? (
-          <AdminLogin onLogin={handleLogin} />
+          <AdminLogin onLogin={handleLogin} isLockedOut={isLockedOut} />
         ) : (
           <div className="flex-1 flex overflow-hidden">
             

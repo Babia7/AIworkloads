@@ -214,8 +214,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateComparisonTable = (val: any) => setComparisonTable(val);
 
   const submitFeedback = (item: Omit<FeedbackItem, 'id' | 'timestamp'>) => {
+    const name = item.name?.trim().slice(0, 100) ?? '';
+    const email = item.email?.trim().slice(0, 254) ?? '';
+    const message = item.message?.trim().slice(0, 2000) ?? '';
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!name || !message || (email && !emailPattern.test(email))) return;
     const newItem: FeedbackItem = {
       ...item,
+      name,
+      email,
+      message,
       id: crypto.randomUUID(),
       timestamp: Date.now()
     };

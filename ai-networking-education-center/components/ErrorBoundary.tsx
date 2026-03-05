@@ -42,9 +42,11 @@ class ErrorBoundary extends React.Component<Props, State> {
               The application encountered an unexpected error. This is likely due to a data mismatch or a temporary glitch.
             </p>
             
-            <div className="bg-black/30 p-3 rounded text-xs font-mono text-red-300 mb-6 text-left overflow-auto max-h-32 border border-red-900/30">
+            {import.meta.env.DEV && (
+              <div className="bg-black/30 p-3 rounded text-xs font-mono text-red-300 mb-6 text-left overflow-auto max-h-32 border border-red-900/30">
                 {this.state.error?.message || "Unknown error"}
-            </div>
+              </div>
+            )}
 
             <button 
               onClick={this.handleReset}

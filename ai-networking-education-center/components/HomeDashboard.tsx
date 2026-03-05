@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useData } from '../contexts/DataContext';
 import { ICON_MAP } from '../constants';
 import { smoothScrollTo } from '../utils/scroll';
+import { sanitizeUrl } from '../utils/sanitize';
 
 // Static color lookups for Tailwind classes
 const COLOR_VARIANTS: Record<string, { bg: string, border: string, text: string, glow: string, ring: string, hoverBg: string }> = {
@@ -27,10 +28,11 @@ const DashboardCard: React.FC<{
 }> = ({ title, subtitle, icon: Icon, progress, href, color, index }) => {
   const styles = COLOR_VARIANTS[color] || COLOR_VARIANTS.blue;
 
+  const safeHref = sanitizeUrl(href) || '#';
   return (
-    <motion.a 
-      href={href}
-      onClick={(e) => smoothScrollTo(e, href)}
+    <motion.a
+      href={safeHref}
+      onClick={(e) => smoothScrollTo(e, safeHref)}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5, ease: "easeOut" }}
