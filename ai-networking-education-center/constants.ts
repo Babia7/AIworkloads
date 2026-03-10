@@ -84,7 +84,7 @@ export const GLOSSARY: Record<string, string> = {
 
   // --- Protocols & Transport ---
   "RoCE": "RDMA over Converged Ethernet. A network protocol that allows remote direct memory access over an Ethernet network, requiring a lossless fabric.",
-  "RoCEv2": "Version 2 of RoCE, which routes packets over Layer 3 (IP/UDP) networks, enabling scalability across data centers.",
+  "RoCEv2": "Version 2 of RoCE, which encapsulates RDMA in UDP packets to enable routing across Layer 3 networks (unlike RoCEv1 which was Layer 2 only), enabling scalability across data centers.",
   "InfiniBand": "A high-speed, low-latency networking standard historically used in HPC, utilizing credit-based flow control to ensure lossless transmission.",
   "UEC": "Ultra Ethernet Consortium. An organization defining new Ethernet standards (UET) specifically optimized for AI and HPC to handle packet loss gracefully.",
   "UET": "Ultra Ethernet Transport. A next-generation transport protocol from UEC featuring packet spraying, flexible ordering, and selective recovery.",
@@ -173,7 +173,7 @@ export const COMPARISON_TABLE = [
   {
     feature: 'Scale',
     legacy: '10s of Thousands of hosts',
-    pinnacle: 'Up to 1 Million simultaneous hosts'
+    pinnacle: 'Up to 1 Million simultaneous hosts (design target)'
   }
 ];
 
@@ -313,7 +313,7 @@ export const CORE_CONCEPTS = [
     id: 'rdma',
     title: "RDMA",
     fullName: "Remote Direct Memory Access",
-    description: "A technology that allows computers to exchange data in main memory without involving the processor, cache, or operating system of either computer. This releases resources for the actual application (AI Training).",
+    description: "A technology that allows computers to exchange data in main memory without involving the CPU kernel or operating system of either computer. The data plane bypasses the OS entirely, freeing CPU resources for the actual application (AI Training).",
     iconKey: "Cpu",
     features: ["Zero-Copy Networking", "Kernel Bypass", "CPU Offload"]
   },
@@ -355,7 +355,7 @@ export const PROTOCOL_CONCEPTS = [
   },
   {
     id: 'uec',
-    title: "UET (UEC)",
+    title: "UET",
     subtitle: "",
     description: "Ultra Ethernet Transport. Designed specifically for AI to tolerate loss and maximize bandwidth.",
     iconKey: "Zap",
