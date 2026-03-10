@@ -356,7 +356,7 @@ export const PROTOCOL_CONCEPTS = [
   {
     id: 'uec',
     title: "UET (UEC)",
-    subtitle: "Future Standard",
+    subtitle: "Current Standard",
     description: "Ultra Ethernet Transport. Designed specifically for AI to tolerate loss and maximize bandwidth.",
     iconKey: "Zap",
     color: "green",
