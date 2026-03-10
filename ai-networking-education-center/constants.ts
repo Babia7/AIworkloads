@@ -87,7 +87,7 @@ export const GLOSSARY: Record<string, string> = {
   "RoCEv2": "Version 2 of RoCE, which routes packets over Layer 3 (IP/UDP) networks, enabling scalability across data centers.",
   "InfiniBand": "A high-speed, low-latency networking standard historically used in HPC, utilizing credit-based flow control to ensure lossless transmission.",
   "UEC": "Ultra Ethernet Consortium. An organization defining new Ethernet standards (UET) specifically optimized for AI and HPC to handle packet loss gracefully.",
-  "UET": "Ultra Ethernet Transport. The upcoming transport protocol from UEC featuring packet spraying, flexible ordering, and selective recovery.",
+  "UET": "Ultra Ethernet Transport. A next-generation transport protocol from UEC featuring packet spraying, flexible ordering, and selective recovery.",
   "TCP/IP": "Transmission Control Protocol/Internet Protocol. The backbone of the internet. Reliable but often too high-latency and CPU-intensive for internal AI fabric communication.",
   "NVMe-oF": "NVMe over Fabrics. Extending the NVMe storage protocol over networks (TCP, RoCE, FC) to access remote SSDs with local-like performance.",
   "GPUDirect": "NVIDIA technology enabling direct communication between GPUs, or between GPUs and network adapters (RDMA), bypassing the host CPU.",
@@ -150,7 +150,7 @@ export const PERFORMANCE_DATA = [
 ];
 
 export const FAILOVER_DATA = [
-  { name: 'InfiniBand', delay: 100, fill: '#ef4444' },
+  { name: 'InfiniBand (multi-hop)', delay: 100, fill: '#ef4444' }, // Worst-case multi-path/multi-hop failover scenario
   { name: 'Arista Ethernet', delay: 3.3, fill: '#22c55e' }, // Approx 30x faster
 ];
 
@@ -331,7 +331,7 @@ export const PROTOCOL_CONCEPTS = [
   {
     id: 'roce',
     title: "RoCEv2",
-    subtitle: "Current Standard",
+    subtitle: "",
     description: "RDMA over Converged Ethernet. Relies on lossless network behavior to function efficiently.",
     iconKey: "Activity",
     color: "blue",
@@ -356,7 +356,7 @@ export const PROTOCOL_CONCEPTS = [
   {
     id: 'uec',
     title: "UET (UEC)",
-    subtitle: "Current Standard",
+    subtitle: "",
     description: "Ultra Ethernet Transport. Designed specifically for AI to tolerate loss and maximize bandwidth.",
     iconKey: "Zap",
     color: "green",
@@ -416,7 +416,7 @@ export const FUTURE_IMPROVEMENTS = [
     color: "emerald",
     iconKey: "BookOpen",
     items: [
-      { title: "Expanded Glossary", desc: "Comprehensive 50+ term dictionary with direct links.", iconKey: "Search" },
+      { title: "Expanded Glossary", desc: "Expanded glossary with direct links to related concepts.", iconKey: "Search" },
       { title: "Downloadable Cheatsheets", desc: "PDF summaries of RoCEv2 headers and Congestion Control.", iconKey: "Download" },
       { title: "Real-World Case Studies", desc: "Architectural breakdowns of famous AI clusters.", iconKey: "Globe" },
       { title: "Topology Designer", desc: "Drag-and-drop sandbox to build Spine-Leaf networks.", iconKey: "Grid" },
@@ -464,7 +464,7 @@ export const FUTURE_IMPROVEMENTS = [
       { title: "Bookmark System", desc: "Save specific sections or terms for later review.", iconKey: "Bookmark" },
       { title: "Database Integration", desc: "Supabase backend for dynamic content management.", iconKey: "Database" },
       { title: "CI/CD Pipeline", desc: "Visualizer for the deployment process of this app.", iconKey: "GitMerge" },
-      { title: "Automated A11y", desc: "Integration of Axe for continuous accessibility testing.", iconKey: "CheckCircle" },
+      { title: "Automated A11y", desc: "Integration of Axe for continuous accessibility testing.", iconKey: "Check" },
       { title: "Image Optimization", desc: "Auto-conversion to AVIF/WebP formats.", iconKey: "Image" },
       { title: "Code Splitting", desc: "Dynamic imports to reduce initial bundle size.", iconKey: "Code" },
       { title: "Service Worker", desc: "Advanced caching strategies for offline resilience.", iconKey: "WifiOff" },
