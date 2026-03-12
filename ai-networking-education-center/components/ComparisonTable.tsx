@@ -29,7 +29,7 @@ const ComparisonTable: React.FC = () => {
               <thead>
                 <tr className="bg-[#0d1117] border-b border-white/5">
                   <th className="p-6 text-slate-500 font-mono text-xs uppercase tracking-wider w-1/3">Feature Criterion</th>
-                  <th className="p-6 text-red-400 font-mono text-xs uppercase tracking-wider border-l border-white/5 w-1/3">Legacy (InfiniBand/RoCEv1)</th>
+                  <th className="p-6 text-red-400 font-mono text-xs uppercase tracking-wider border-l border-white/5 w-1/3">Traditional Lossless Protocols (InfiniBand)</th>
                   <th className="p-6 text-emerald-400 font-mono text-xs uppercase tracking-wider bg-emerald-500/5 border-l border-emerald-500/20 w-1/3">Ultra Ethernet (UEC)</th>
                 </tr>
               </thead>

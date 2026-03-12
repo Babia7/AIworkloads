@@ -84,10 +84,10 @@ export const GLOSSARY: Record<string, string> = {
 
   // --- Protocols & Transport ---
   "RoCE": "RDMA over Converged Ethernet. A network protocol that allows remote direct memory access over an Ethernet network, requiring a lossless fabric.",
-  "RoCEv2": "Version 2 of RoCE, which routes packets over Layer 3 (IP/UDP) networks, enabling scalability across data centers.",
+  "RoCEv2": "Version 2 of RoCE, which encapsulates RDMA in UDP packets to enable routing across Layer 3 networks (unlike RoCEv1 which was Layer 2 only), enabling scalability across data centers.",
   "InfiniBand": "A high-speed, low-latency networking standard historically used in HPC, utilizing credit-based flow control to ensure lossless transmission.",
   "UEC": "Ultra Ethernet Consortium. An organization defining new Ethernet standards (UET) specifically optimized for AI and HPC to handle packet loss gracefully.",
-  "UET": "Ultra Ethernet Transport. The upcoming transport protocol from UEC featuring packet spraying, flexible ordering, and selective recovery.",
+  "UET": "Ultra Ethernet Transport. A next-generation transport protocol from UEC featuring packet spraying, flexible ordering, and selective recovery.",
   "TCP/IP": "Transmission Control Protocol/Internet Protocol. The backbone of the internet. Reliable but often too high-latency and CPU-intensive for internal AI fabric communication.",
   "NVMe-oF": "NVMe over Fabrics. Extending the NVMe storage protocol over networks (TCP, RoCE, FC) to access remote SSDs with local-like performance.",
   "GPUDirect": "NVIDIA technology enabling direct communication between GPUs, or between GPUs and network adapters (RDMA), bypassing the host CPU.",
@@ -150,7 +150,7 @@ export const PERFORMANCE_DATA = [
 ];
 
 export const FAILOVER_DATA = [
-  { name: 'InfiniBand', delay: 100, fill: '#ef4444' },
+  { name: 'InfiniBand (multi-hop)', delay: 100, fill: '#ef4444' }, // Worst-case multi-path/multi-hop failover scenario
   { name: 'Arista Ethernet', delay: 3.3, fill: '#22c55e' }, // Approx 30x faster
 ];
 
@@ -173,7 +173,7 @@ export const COMPARISON_TABLE = [
   {
     feature: 'Scale',
     legacy: '10s of Thousands of hosts',
-    pinnacle: 'Up to 1 Million simultaneous hosts'
+    pinnacle: 'Up to 1 Million simultaneous hosts (design target)'
   }
 ];
 
@@ -181,16 +181,16 @@ export const PRODUCTS = [
   {
     id: '7060X',
     series: '7060X Series',
-    role: 'Fixed AI Leaf',
+    role: 'AI Leaf or Spine',
     iconKey: "Server",
-    desc: 'High-capacity, low-latency Ethernet switching optimized for AI leaf roles. Featuring fixed form factors ideal for high-scale AI clusters and high radix topologies. Support for LPO and PCIe integration.',
-    specs: ['51.2T Capacity', 'Tomahawk', '800G OSFP', 'LPO Support'],
-    scale: 'High-Scale AI Clusters',
+    desc: 'High-capacity, low-latency Ethernet switching deployable as an AI leaf or spine in smaller fabrics. Fixed form factors ideal for high-scale AI clusters and high-radix topologies. Support for LPO and PCIe integration.',
+    specs: ['51.2T Capacity', 'Tomahawk5', '800G OSFP', 'LPO Support'],
+    scale: 'AI Leaf & Spine Fabrics',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7060X6-Datasheet.pdf',
     keyFeatures: [
         { label: "Power Efficiency", value: "-25%", subtext: "Lower power per Gbps vs prior gen", iconKey: "Zap" },
         { label: "LPO Optics", value: "-50%", subtext: "Add'l power reduction with Linear Drive", iconKey: "Leaf" },
-        { label: "Silicon", value: "Tomahawk", subtext: "Latest Broadcom chipset architecture", iconKey: "Cpu" }
+        { label: "Silicon", value: "Tomahawk5", subtext: "Latest Broadcom chipset architecture", iconKey: "Cpu" }
     ],
     variants: [
         { name: "7060X6-64PE", chip: "Tomahawk", capacity: "51.2T", ports: "64x 800G", formFactor: "2RU" },
@@ -245,16 +245,16 @@ export const PRODUCTS = [
   {
     id: '7280R3',
     series: '7280R3 Series',
-    role: 'Universal Leaf',
+    role: 'Universal Leaf for Storage',
     iconKey: "HardDrive",
     desc: 'Purpose-built for IP storage and data-intensive workloads. Features dynamic deep packet buffers (up to 8GB) that absorb microbursts common in storage environments (NVMe-oF, iSCSI). Utilizes VOQ to ensure lossless behavior under congestion.',
-    specs: ['Jericho 2', 'Deep Buffers', '100G/400G', 'Internet Peering'],
+    specs: ['Jericho 2', 'Deep Buffers', '100G/400G', 'VOQ Architecture'],
     scale: 'Storage & WAN Edge',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Datasheet.pdf',
     keyFeatures: [
         { label: "Buffering", value: "Dynamic", subtext: "Absorbs storage microbursts", iconKey: "Layers" },
         { label: "Storage", value: "Optimized", subtext: "Ideal for NVMe/RoCE", iconKey: "Database" },
-        { label: "Routing", value: "High Scale", subtext: "Internet table support", iconKey: "Globe" }
+        { label: "Reliability", value: "Lossless", subtext: "VOQ eliminates HOL blocking", iconKey: "ShieldCheck" }
     ],
     variants: [
         { name: "7280CR3", chip: "Jericho 2", capacity: "9.6T", ports: "Fixed 400G", formFactor: "1RU/2RU" },
@@ -264,12 +264,12 @@ export const PRODUCTS = [
   {
     id: '7280R3A',
     series: '7280R3A Series',
-    role: 'High Perf AI/Storage',
+    role: 'Universal Leaf for Storage',
     iconKey: "Database",
-    desc: 'Evolution of the R3 series delivering higher density and power efficiency for AI storage fabrics. Features ultra-deep buffers for lossless AI training data retrieval and massive table scale for modern data centers.',
+    desc: 'Evolution of the R3 series delivering higher density and power efficiency for AI storage fabrics. Features ultra-deep buffers and deeper buffer pools for lossless AI training data retrieval and high-density storage fabrics.',
     specs: ['Jericho 2C+', 'Algorithmic ACLs', '400G High Density', 'In-band Telemetry'],
-    scale: 'AI Data Lakes',
-    datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Datasheet.pdf',
+    scale: 'AI Storage Fabrics',
+    datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7280R3A-Modular-Datasheet.pdf',
     keyFeatures: [
         { label: "Architecture", value: "VOQ", subtext: "Eliminates HOL blocking", iconKey: "ShieldCheck" },
         { label: "Telemetry", value: "INT", subtext: "In-band Network Telemetry", iconKey: "Activity" },
@@ -313,7 +313,7 @@ export const CORE_CONCEPTS = [
     id: 'rdma',
     title: "RDMA",
     fullName: "Remote Direct Memory Access",
-    description: "A technology that allows computers to exchange data in main memory without involving the processor, cache, or operating system of either computer. This releases resources for the actual application (AI Training).",
+    description: "A technology that allows computers to exchange data in main memory without involving the CPU kernel or operating system of either computer. The data plane bypasses the OS entirely, freeing CPU resources for the actual application (AI Training).",
     iconKey: "Cpu",
     features: ["Zero-Copy Networking", "Kernel Bypass", "CPU Offload"]
   },
@@ -331,7 +331,7 @@ export const PROTOCOL_CONCEPTS = [
   {
     id: 'roce',
     title: "RoCEv2",
-    subtitle: "Current Standard",
+    subtitle: "",
     description: "RDMA over Converged Ethernet. Relies on lossless network behavior to function efficiently.",
     iconKey: "Activity",
     color: "blue",
@@ -355,8 +355,8 @@ export const PROTOCOL_CONCEPTS = [
   },
   {
     id: 'uec',
-    title: "UET (UEC)",
-    subtitle: "Current Standard",
+    title: "UET",
+    subtitle: "",
     description: "Ultra Ethernet Transport. Designed specifically for AI to tolerate loss and maximize bandwidth.",
     iconKey: "Zap",
     color: "green",
@@ -416,7 +416,7 @@ export const FUTURE_IMPROVEMENTS = [
     color: "emerald",
     iconKey: "BookOpen",
     items: [
-      { title: "Expanded Glossary", desc: "Comprehensive 50+ term dictionary with direct links.", iconKey: "Search" },
+      { title: "Expanded Glossary", desc: "Expanded glossary with direct links to related concepts.", iconKey: "Search" },
       { title: "Downloadable Cheatsheets", desc: "PDF summaries of RoCEv2 headers and Congestion Control.", iconKey: "Download" },
       { title: "Real-World Case Studies", desc: "Architectural breakdowns of famous AI clusters.", iconKey: "Globe" },
       { title: "Topology Designer", desc: "Drag-and-drop sandbox to build Spine-Leaf networks.", iconKey: "Grid" },
@@ -464,7 +464,7 @@ export const FUTURE_IMPROVEMENTS = [
       { title: "Bookmark System", desc: "Save specific sections or terms for later review.", iconKey: "Bookmark" },
       { title: "Database Integration", desc: "Supabase backend for dynamic content management.", iconKey: "Database" },
       { title: "CI/CD Pipeline", desc: "Visualizer for the deployment process of this app.", iconKey: "GitMerge" },
-      { title: "Automated A11y", desc: "Integration of Axe for continuous accessibility testing.", iconKey: "CheckCircle" },
+      { title: "Automated A11y", desc: "Integration of Axe for continuous accessibility testing.", iconKey: "Check" },
       { title: "Image Optimization", desc: "Auto-conversion to AVIF/WebP formats.", iconKey: "Image" },
       { title: "Code Splitting", desc: "Dynamic imports to reduce initial bundle size.", iconKey: "Code" },
       { title: "Service Worker", desc: "Advanced caching strategies for offline resilience.", iconKey: "WifiOff" },
