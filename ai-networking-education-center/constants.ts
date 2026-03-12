@@ -181,16 +181,16 @@ export const PRODUCTS = [
   {
     id: '7060X',
     series: '7060X Series',
-    role: 'Fixed AI Leaf',
+    role: 'AI Leaf or Spine',
     iconKey: "Server",
-    desc: 'High-capacity, low-latency Ethernet switching optimized for AI leaf roles. Featuring fixed form factors ideal for high-scale AI clusters and high radix topologies. Support for LPO and PCIe integration.',
-    specs: ['51.2T Capacity', 'Tomahawk', '800G OSFP', 'LPO Support'],
-    scale: 'High-Scale AI Clusters',
+    desc: 'High-capacity, low-latency Ethernet switching deployable as an AI leaf or spine in smaller fabrics. Fixed form factors ideal for high-scale AI clusters and high-radix topologies. Support for LPO and PCIe integration.',
+    specs: ['51.2T Capacity', 'Tomahawk5', '800G OSFP', 'LPO Support'],
+    scale: 'AI Leaf & Spine Fabrics',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7060X6-Datasheet.pdf',
     keyFeatures: [
         { label: "Power Efficiency", value: "-25%", subtext: "Lower power per Gbps vs prior gen", iconKey: "Zap" },
         { label: "LPO Optics", value: "-50%", subtext: "Add'l power reduction with Linear Drive", iconKey: "Leaf" },
-        { label: "Silicon", value: "Tomahawk", subtext: "Latest Broadcom chipset architecture", iconKey: "Cpu" }
+        { label: "Silicon", value: "Tomahawk5", subtext: "Latest Broadcom chipset architecture", iconKey: "Cpu" }
     ],
     variants: [
         { name: "7060X6-64PE", chip: "Tomahawk", capacity: "51.2T", ports: "64x 800G", formFactor: "2RU" },
@@ -245,16 +245,16 @@ export const PRODUCTS = [
   {
     id: '7280R3',
     series: '7280R3 Series',
-    role: 'Universal Leaf',
+    role: 'Universal Leaf for Storage',
     iconKey: "HardDrive",
     desc: 'Purpose-built for IP storage and data-intensive workloads. Features dynamic deep packet buffers (up to 8GB) that absorb microbursts common in storage environments (NVMe-oF, iSCSI). Utilizes VOQ to ensure lossless behavior under congestion.',
-    specs: ['Jericho 2', 'Deep Buffers', '100G/400G', 'Internet Peering'],
+    specs: ['Jericho 2', 'Deep Buffers', '100G/400G', 'VOQ Architecture'],
     scale: 'Storage & WAN Edge',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Datasheet.pdf',
     keyFeatures: [
         { label: "Buffering", value: "Dynamic", subtext: "Absorbs storage microbursts", iconKey: "Layers" },
         { label: "Storage", value: "Optimized", subtext: "Ideal for NVMe/RoCE", iconKey: "Database" },
-        { label: "Routing", value: "High Scale", subtext: "Internet table support", iconKey: "Globe" }
+        { label: "Reliability", value: "Lossless", subtext: "VOQ eliminates HOL blocking", iconKey: "ShieldCheck" }
     ],
     variants: [
         { name: "7280CR3", chip: "Jericho 2", capacity: "9.6T", ports: "Fixed 400G", formFactor: "1RU/2RU" },
@@ -264,12 +264,12 @@ export const PRODUCTS = [
   {
     id: '7280R3A',
     series: '7280R3A Series',
-    role: 'High Perf AI/Storage',
+    role: 'Universal Leaf for Storage',
     iconKey: "Database",
-    desc: 'Evolution of the R3 series delivering higher density and power efficiency for AI storage fabrics. Features ultra-deep buffers for lossless AI training data retrieval and massive table scale for modern data centers.',
+    desc: 'Evolution of the R3 series delivering higher density and power efficiency for AI storage fabrics. Features ultra-deep buffers and deeper buffer pools for lossless AI training data retrieval and high-density storage fabrics.',
     specs: ['Jericho 2C+', 'Algorithmic ACLs', '400G High Density', 'In-band Telemetry'],
-    scale: 'AI Data Lakes',
-    datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Datasheet.pdf',
+    scale: 'AI Storage Fabrics',
+    datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7280R3A-Modular-Datasheet.pdf',
     keyFeatures: [
         { label: "Architecture", value: "VOQ", subtext: "Eliminates HOL blocking", iconKey: "ShieldCheck" },
         { label: "Telemetry", value: "INT", subtext: "In-band Network Telemetry", iconKey: "Activity" },
