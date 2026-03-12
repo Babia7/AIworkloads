@@ -11,11 +11,13 @@ const ConceptsSection: React.FC = () => {
   // Safe access to concepts array with fallbacks
   const rdma = (coreConcepts || []).find(c => c.id === 'rdma');
   const nvme = (coreConcepts || []).find(c => c.id === 'nvme');
+  const roce = (coreConcepts || []).find(c => c.id === 'roce_intro');
 
   if (!rdma || !nvme) return null;
 
   const RdmaIcon = ICON_MAP[rdma.iconKey] || Cpu;
   const NvmeIcon = ICON_MAP[nvme.iconKey] || Database;
+  const RoceIcon = roce ? (ICON_MAP[roce.iconKey] || Network) : Network;
 
   return (
     <section id="concepts" className="py-24 bg-slate-950 border-t border-slate-900">
@@ -123,7 +125,7 @@ const ConceptsSection: React.FC = () => {
                             <span className="text-white font-medium">The Goal:</span> Build a fabric to disaggregate NVMe SSDs and compute without compromising on latency. This allows for <span className="text-white">independent scaling</span> of storage and compute resources.
                         </p>
                         <p>
-                            <span className="text-white font-medium">Mechanism:</span> The fabric can be built using different transport mechanisms such as <span className="text-purple-200">FibreChannel</span>, <span className="text-purple-200">RoCE</span>, and <span className="text-purple-200">TCP/IP</span>.
+                            <span className="text-white font-medium">Mechanism:</span> The fabric can be built using different transport mechanisms such as <span className="text-purple-200">FibreChannel</span>, <GlossaryTerm term="RoCEv2"><span className="text-purple-200">RoCE</span></GlossaryTerm>, and <span className="text-purple-200">TCP/IP</span>.
                         </p>
                         <div className="flex items-center gap-2 p-2 bg-slate-950/50 rounded border border-purple-500/10 text-xs">
                            <Layers size={14} className="text-purple-400 shrink-0" />
@@ -203,6 +205,73 @@ const ConceptsSection: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* RoCEv2 — Full-width bridge card */}
+        {roce && (
+          <div className="mt-12 bg-slate-900 rounded-2xl p-8 border border-slate-800 relative overflow-hidden group hover:border-green-500/30 transition-colors">
+            <div className="absolute top-0 right-0 p-32 bg-green-500/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 bg-green-900/30 rounded-lg text-green-400">
+                  <RoceIcon size={32} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white">{roce.title}</h3>
+                  <p className="text-green-400 text-sm font-semibold uppercase tracking-wider">{roce.fullName}</p>
+                </div>
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-8 items-start">
+                <div>
+                  <p className="text-slate-300 mb-6 leading-relaxed">{roce.description}</p>
+                  <ul className="space-y-3">
+                    {roce.features.map((feature: string, i: number) => (
+                      <li key={i} className="flex items-center gap-3 text-slate-300">
+                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Bridge visual: RDMA → RoCEv2 → Ethernet */}
+                <div
+                  className="bg-slate-950 rounded-xl p-6 border border-slate-800"
+                  role="img"
+                  aria-label="Diagram showing RoCEv2 as the bridge layer between RDMA and Ethernet. RDMA verbs are encapsulated into UDP/IP by RoCEv2 and carried over a lossless Ethernet fabric."
+                >
+                  <div className="text-xs text-slate-500 font-mono uppercase tracking-widest mb-4 text-center">Protocol Stack</div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                      <Cpu size={16} className="text-blue-400 shrink-0" />
+                      <span className="text-blue-300 text-sm font-semibold">RDMA Verbs</span>
+                      <span className="text-slate-500 text-xs ml-auto">Application layer</span>
+                    </div>
+                    <div className="flex justify-center">
+                      <ArrowRight size={14} className="text-slate-600 rotate-90" />
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-green-900/20 border border-green-500/40 rounded-lg">
+                      <Network size={16} className="text-green-400 shrink-0" />
+                      <span className="text-green-300 text-sm font-semibold">RoCEv2 / UDP / IP</span>
+                      <span className="text-slate-500 text-xs ml-auto">Transport layer</span>
+                    </div>
+                    <div className="flex justify-center">
+                      <ArrowRight size={14} className="text-slate-600 rotate-90" />
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-slate-800/60 border border-slate-700 rounded-lg">
+                      <Layers size={16} className="text-slate-400 shrink-0" />
+                      <span className="text-slate-300 text-sm font-semibold">Lossless Ethernet Fabric</span>
+                      <span className="text-slate-500 text-xs ml-auto">Physical layer</span>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-slate-800/50 text-xs text-slate-400 text-center">
+                    Lossless behavior (PFC + ECN) required at the Ethernet layer
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <style>{`
           @keyframes moveLeftRight {

@@ -32,7 +32,7 @@ export const DEFAULT_HOME_MODULES: HomeModule[] = [
     iconKey: "Layers", progress: 100, href: "#etherlink", color: "blue" 
   },
   { 
-    id: 'mod_2', title: "Core Technologies", subtitle: "RDMA, NVMe-oF, and the mechanics of Zero-Copy networking.", 
+    id: 'mod_2', title: "Core Technologies", subtitle: "RDMA, RoCEv2, and NVMe-oF — the foundation of lossless AI fabrics.",
     iconKey: "Cpu", progress: 45, href: "#concepts", color: "purple" 
   },
   { 
@@ -313,17 +313,25 @@ export const CORE_CONCEPTS = [
     id: 'rdma',
     title: "RDMA",
     fullName: "Remote Direct Memory Access",
-    description: "A technology that allows computers to exchange data in main memory without involving the CPU kernel or operating system of either computer. The data plane bypasses the OS entirely, freeing CPU resources for the actual application (AI Training).",
+    description: "A technology that allows a host to directly read or write data in a remote host's memory without involving the CPU or OS kernel of either machine. The data plane bypasses the OS entirely, freeing CPU resources for the actual application (AI Training).",
     iconKey: "Cpu",
-    features: ["Zero-Copy Networking", "Kernel Bypass", "CPU Offload"]
+    features: ["Zero-Copy Networking", "Kernel Bypass", "GPUDirect RDMA"]
   },
   {
     id: 'nvme',
     title: "NVMe",
-    fullName: "Non-Volatile Memory Express",
-    description: "A storage interface protocol designed to accelerate the transfer of data between enterprise and client systems and solid-state drives (SSDs). It utilizes high-speed PCIe lanes to maximize parallelism.",
+    fullName: "Non-Volatile Memory Express (NVMe / NVMe-oF)",
+    description: "A storage interface protocol designed to accelerate the transfer of data between enterprise and client systems and solid-state drives (SSDs). It utilizes high-speed PCIe lanes to maximize parallelism. Extended as NVMe over Fabrics (NVMe-oF), this protocol enables disaggregated storage over Ethernet, RoCE, or Fibre Channel with near-local latency.",
     iconKey: "Database",
-    features: ["64K I/O Queues", "Massive Parallelism", "Low Latency Access"]
+    features: ["65K I/O Queues", "Massive Parallelism", "Low Latency Access"]
+  },
+  {
+    id: 'roce_intro',
+    title: "RoCEv2",
+    fullName: "RDMA over Converged Ethernet v2",
+    description: "The transport that carries RDMA traffic over standard Ethernet. RoCEv2 encapsulates RDMA packets in UDP/IP, enabling kernel-bypass, zero-copy transfers between hosts on an Ethernet fabric. It depends on a lossless network (via PFC and ECN) to function correctly — making lossless fabric design the foundation of AI networking.",
+    iconKey: "Network",
+    features: ["UDP/IP Encapsulation", "Lossless Fabric Required", "PFC & ECN Dependent"]
   }
 ];
 
