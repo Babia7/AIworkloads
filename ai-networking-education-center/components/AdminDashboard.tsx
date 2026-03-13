@@ -36,7 +36,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<AdminTab>('config');
 
   const handleLogin = (password: string) => {
-    if (password === '19901991') {
+    if (password === (import.meta.env.VITE_ADMIN_PASSWORD ?? '19901991')) {
       setIsAuthenticated(true);
     } else {
       alert('Access Denied');
