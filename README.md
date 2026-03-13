@@ -14,10 +14,11 @@ An interactive, single-page educational platform teaching modern AI networking �
 | 02 | **Core Technologies** | `#concepts` | RDMA, RoCEv2, NVMe-oF, kernel bypass, GPUDirect, lossless fabric requirements |
 | 03 | **Protocols & Data Flow** | `#protocols` | RoCEv2 vs Ultra Ethernet (UET), packet spraying, selective retry, PFC/ECN |
 | 04 | **Congestion & Performance** | `#performance` | ECN, PFC, head-of-line blocking, job completion time, tail latency |
-| 05 | **Hardware Platforms** | `#hardware` | Arista 7060X, 7800R, 7700R DES, 7280R3, 7280R3A — specs, variants, key features |
-| 06 | **AI vs HPC** | `#hpc` | Synchronization barriers, traffic patterns, scale priorities comparison |
-| 07 | **Protocol Deep Dive** | `#deep-dive` | Advanced RoCEv2/UET technical comparison |
-| 08 | **Glossary** | `#glossary` | 145+ searchable networking terms |
+| 05 | **Operations Playbooks** | `#operations` | Vendor-neutral principles, troubleshooting runbooks, migration matrix, module checks |
+| 06 | **Hardware Platforms** | `#hardware` | Arista 7060X, 7800R, 7700R DES, 7280R3, 7280R3A — specs, variants, key features |
+| 07 | **AI vs HPC** | `#hpc` | Synchronization barriers, traffic patterns, scale priorities comparison |
+| 08 | **Protocol Deep Dive** | `#deep-dive` | Advanced RoCEv2/UET technical comparison |
+| 09 | **Glossary** | `#glossary` | 145+ searchable networking terms |
 
 All content is editable at runtime via the built-in [Admin CMS](#admin-cms).
 
@@ -72,6 +73,7 @@ AIworkloads/
     │   ├── ProtocolDeepDive.tsx     # Advanced protocol detail
     │   ├── ComparisonTable.tsx      # Feature matrix (Ethernet vs legacy)
     │   ├── PerformanceSection.tsx   # Recharts efficiency/failover graphs
+    │   ├── OperationsPlaybooksSection.tsx # Day-2 runbooks + migration matrix
     │   ├── HardwareSection.tsx      # Arista platform selector + specs
     │   ├── HPCSection.tsx           # AI vs HPC checklist
     │   ├── GlossarySection.tsx      # Searchable 3-column term grid
@@ -115,6 +117,7 @@ App
     │   ├── FadeIn > ProtocolDeepDive      id="deep-dive"
     │   ├── FadeIn > ComparisonTable       id="uec"
     │   ├── FadeIn > PerformanceSection    id="performance"
+    │   ├── FadeIn > OperationsPlaybooksSection id="operations"
     │   ├── FadeIn > HardwareSection       id="hardware"
     │   ├── FadeIn > HPCSection            id="hpc"
     │   └── FadeIn > GlossarySection       id="glossary"

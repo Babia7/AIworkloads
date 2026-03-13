@@ -19,6 +19,7 @@ import ProtocolDeepDive from './components/ProtocolDeepDive';
 import ComparisonTable from './components/ComparisonTable';
 import PerformanceSection from './components/PerformanceSection';
 import HardwareSection from './components/HardwareSection';
+import OperationsPlaybooksSection from './components/OperationsPlaybooksSection';
 import HPCSection from './components/HPCSection';
 import GlossarySection from './components/GlossarySection';
 
@@ -68,6 +69,10 @@ const AppContent: React.FC = () => {
           <PerformanceSection />
         </FadeIn>
         
+        <FadeIn>
+          <OperationsPlaybooksSection />
+        </FadeIn>
+
         <FadeIn>
           <HardwareSection />
         </FadeIn>
