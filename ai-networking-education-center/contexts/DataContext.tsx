@@ -1,10 +1,10 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
+import {
   GLOSSARY, PRODUCTS, FUTURE_IMPROVEMENTS, DEFAULT_APP_CONFIG, DEFAULT_HOME_MODULES,
-  PERFORMANCE_DATA, FAILOVER_DATA, PROTOCOL_CONCEPTS, SCALING_CONCEPTS, CORE_CONCEPTS, COMPARISON_TABLE
+  PERFORMANCE_DATA, FAILOVER_DATA, STAT_CARDS, PROTOCOL_CONCEPTS, SCALING_CONCEPTS, CORE_CONCEPTS, COMPARISON_TABLE
 } from '../constants';
-import { ProductData, AppConfig, HomeModule, ChartData, FeedbackItem, ScalingConcept, ConceptData, ComparisonRow } from '../types';
+import { ProductData, AppConfig, HomeModule, ChartData, StatCardData, FeedbackItem, ScalingConcept, ConceptData, ComparisonRow } from '../types';
 
 /**
  * DataContext Architecture
@@ -49,8 +49,10 @@ interface DataContextType {
   // Performance Module
   performanceData: ChartData[];
   failoverData: ChartData[];
+  statCards: StatCardData[];
   updatePerformanceData: (data: ChartData[]) => void;
   updateFailoverData: (data: ChartData[]) => void;
+  updateStatCards: (data: StatCardData[]) => void;
 
   // Hardware Module
   products: ProductData[];
@@ -168,6 +170,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [homeModules, setHomeModules] = useState<HomeModule[]>(() => loadState('app_home_modules', DEFAULT_HOME_MODULES));
   const [performanceData, setPerformanceData] = useState<ChartData[]>(() => loadState('app_perf_data', PERFORMANCE_DATA));
   const [failoverData, setFailoverData] = useState<ChartData[]>(() => loadState('app_failover_data', FAILOVER_DATA));
+  const [statCards, setStatCards] = useState<StatCardData[]>(() => loadState('app_stat_cards', STAT_CARDS));
   const [protocolConcepts, setProtocolConcepts] = useState<any[]>(() => loadState('app_protocols', PROTOCOL_CONCEPTS));
   const [hpcChecklist, setHpcChecklist] = useState<any[]>(() => loadState('app_hpc_checklist', INITIAL_HPC_CHECKLIST));
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>(() => loadState('app_feedback', []));
@@ -185,6 +188,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => { localStorage.setItem('app_home_modules', JSON.stringify(homeModules)); }, [homeModules]);
   useEffect(() => { localStorage.setItem('app_perf_data', JSON.stringify(performanceData)); }, [performanceData]);
   useEffect(() => { localStorage.setItem('app_failover_data', JSON.stringify(failoverData)); }, [failoverData]);
+  useEffect(() => { localStorage.setItem('app_stat_cards', JSON.stringify(statCards)); }, [statCards]);
   useEffect(() => { localStorage.setItem('app_protocols', JSON.stringify(protocolConcepts)); }, [protocolConcepts]);
   useEffect(() => { localStorage.setItem('app_hpc_checklist', JSON.stringify(hpcChecklist)); }, [hpcChecklist]);
   useEffect(() => { localStorage.setItem('app_feedback', JSON.stringify(feedbackList)); }, [feedbackList]);
@@ -207,6 +211,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateHomeModules = (val: any) => setHomeModules(val);
   const updatePerformanceData = (val: any) => setPerformanceData(val);
   const updateFailoverData = (val: any) => setFailoverData(val);
+  const updateStatCards = (val: any) => setStatCards(val);
   const updateProtocolConcepts = (val: any) => setProtocolConcepts(val);
   const updateHpcChecklist = (val: any) => setHpcChecklist(val);
   const updateScalingConcepts = (val: any) => setScalingConcepts(val);
@@ -247,6 +252,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       homeModules, updateHomeModules,
       performanceData, updatePerformanceData,
       failoverData, updateFailoverData,
+      statCards, updateStatCards,
       protocolConcepts, updateProtocolConcepts,
       hpcChecklist, updateHpcChecklist,
       scalingConcepts, updateScalingConcepts,

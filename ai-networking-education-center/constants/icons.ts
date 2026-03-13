@@ -6,7 +6,7 @@ import {
   Search, Download, Eye, Keyboard, Settings, Lock, Check, X, Save, Trash2, Plus, RotateCcw,
   LogOut, Edit, Moon, Sun, Type, MousePointer, Maximize, Minimize, List, CheckSquare, Video,
   Mic, Cloud, Flag, Share2, Clock, MessageSquare, Users, FileText, Printer, Bookmark, WifiOff,
-  Image, TriangleAlert, CircleHelp, ArrowUp, Menu, Info, Pen, Box
+  Image, TriangleAlert, CircleHelp, ArrowUp, Menu, Info, Pen, Box, TrendingUp
 } from 'lucide-react';
 
 /**
@@ -24,6 +24,6 @@ export const ICON_MAP: Record<string, any> = {
   Search, Download, Eye, Keyboard, Settings, Moon, Sun, Type, MousePointer, Maximize, Minimize,
   List, CheckSquare, Video, Mic, Cloud, Flag, Share2, Save, Clock, MessageSquare, Users, FileText,
   Printer, Bookmark, WifiOff, Image, TriangleAlert, CircleHelp, ArrowUp, Menu, Info, Edit, Pen,
-  AlertTriangle: TriangleAlert, HelpCircle: CircleHelp, Edit2: Edit, Box,
+  AlertTriangle: TriangleAlert, HelpCircle: CircleHelp, Edit2: Edit, Box, TrendingUp,
   Lock, Check, X, Trash2, Plus, RotateCcw, LogOut,
 };

@@ -24,6 +24,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
     homeModules, updateHomeModules,
     performanceData, updatePerformanceData,
     failoverData, updateFailoverData,
+    statCards, updateStatCards,
     protocolConcepts, updateProtocolConcepts,
     hpcChecklist, updateHpcChecklist,
     scalingConcepts, updateScalingConcepts,
@@ -90,7 +91,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose }) => {
 
                   {activeTab === 'glossary' && <GlossaryEditor glossary={glossary} onUpdate={updateGlossary} />}
                   {activeTab === 'products' && <ProductsEditor products={products} onUpdate={updateProducts} />}
-                  {activeTab === 'performance' && <PerformanceEditor perfData={performanceData} failData={failoverData} onUpdatePerf={updatePerformanceData} onUpdateFail={updateFailoverData} />}
+                  {activeTab === 'performance' && <PerformanceEditor perfData={performanceData} failData={failoverData} statCards={statCards} onUpdatePerf={updatePerformanceData} onUpdateFail={updateFailoverData} onUpdateStatCards={updateStatCards} />}
                   {activeTab === 'protocols' && <ProtocolEditor protocols={protocolConcepts} onUpdate={updateProtocolConcepts} />}
                   {activeTab === 'hpc' && <HPCEditor checklist={hpcChecklist} onUpdate={updateHpcChecklist} />}
                   {activeTab === 'future' && <FutureEditor data={futureImprovements} onUpdate={updateFutureImprovements} />}

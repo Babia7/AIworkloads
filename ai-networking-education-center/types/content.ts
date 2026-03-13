@@ -90,6 +90,15 @@ export interface HPCItem {
   points: string[];
 }
 
+/** Performance module stat card */
+export interface StatCardData {
+  label: string;
+  value: string;
+  unit: string;
+  trend: string;
+  iconKey: string;
+}
+
 /** Individual roadmap improvement item */
 export interface FutureItem {
   title: string;

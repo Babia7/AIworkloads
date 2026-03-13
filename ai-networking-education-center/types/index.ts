@@ -8,5 +8,6 @@ export type {
   ProtocolMechanism, ProtocolConcept,
   HPCItem,
   FutureItem, FutureCategory,
+  StatCardData,
 } from './content';
 export type { FeedbackItem } from './admin';
