@@ -4,6 +4,8 @@ import { useData } from '../contexts/DataContext';
 import { ChevronRight, Info, Server, ExternalLink } from 'lucide-react';
 import { ICON_MAP } from '../constants';
 import GlossaryTerm from './GlossaryTerm';
+import SourceBadge from './SourceBadge';
+import { claimText, hasSourceMetadata } from '../utils/sourceClaims';
 
 // Helper component to parse text and auto-wrap known glossary terms
 // This ensures that even dynamic content from the admin panel gets tooltips.
@@ -114,8 +116,9 @@ const HardwareSection: React.FC = () => {
                 </div>
                 <div className="flex gap-2">
                     {activeProduct.specs.slice(0,2).map((spec, i) => (
-                        <div key={i} className="px-3 py-1 bg-[#0d1117] border border-white/10 rounded text-xs text-slate-300 font-mono">
-                            {spec}
+                        <div key={i} className="flex items-center gap-2 px-3 py-1 bg-[#0d1117] border border-white/10 rounded text-xs text-slate-300 font-mono">
+                            <span>{claimText(spec)}</span>
+                            {hasSourceMetadata(spec) && <SourceBadge claim={spec} />}
                         </div>
                     ))}
                 </div>
@@ -127,7 +130,7 @@ const HardwareSection: React.FC = () => {
                     <div>
                         <h4 className="text-slate-500 font-mono text-xs uppercase tracking-wider mb-4">Description</h4>
                         {/* Use the new renderer instead of raw string */}
-                        <DescriptionRenderer text={activeProduct.desc} />
+                        <div className="flex flex-wrap items-start gap-2"><DescriptionRenderer text={claimText(activeProduct.desc)} />{hasSourceMetadata(activeProduct.desc) && <SourceBadge claim={activeProduct.desc} />}</div>
                         
                         {/* Datasheet Link */}
                         {activeProduct.datasheetUrl && (

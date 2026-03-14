@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.tsx",
-    "format": "prettier --write \"**/*.{ts,tsx,json,css}\""
+    "format": "prettier --write \"**/*.{ts,tsx,json,css}\"",
+    "check:claim-sources": "node scripts/validate-claim-sources.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.0.0",

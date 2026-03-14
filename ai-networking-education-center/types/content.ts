@@ -1,4 +1,12 @@
 
+export interface SourceLinkedValue {
+  value: string;
+  sourceUrl: string;
+  sourceTitle: string;
+  sourceRevisionOrDate: string;
+  verificationStatus: 'verified' | 'vendor-claim' | 'estimated';
+}
+
 /** SKU variant row for a product */
 export interface ProductVariant {
   name: string;
@@ -22,8 +30,8 @@ export interface ProductData {
   series: string;
   role: string;
   iconKey: string;
-  desc: string;
-  specs: string[];
+  desc: string | SourceLinkedValue;
+  specs: Array<string | SourceLinkedValue>;
   scale: string;
   variants?: ProductVariant[];
   keyFeatures?: ProductFeature[];
@@ -32,7 +40,7 @@ export interface ProductData {
 
 /** Single data point for Recharts bar/line charts */
 export interface ChartData {
-  name: string;
+  name: string | SourceLinkedValue;
   value?: number;
   time?: number;
   efficiency?: number;
@@ -45,16 +53,16 @@ export interface ConceptData {
   id: string;
   title: string;
   fullName: string;
-  description: string;
+  description: string | SourceLinkedValue;
   iconKey: string;
-  features: string[];
+  features: Array<string | SourceLinkedValue>;
 }
 
 /** Scale Up / Out / Across architecture card */
 export interface ScalingConcept {
   title: string;
-  desc: string;
-  details: string;
+  desc: string | SourceLinkedValue;
+  details: string | SourceLinkedValue;
   iconKey: string;
 }
 
@@ -87,7 +95,7 @@ export interface ProtocolConcept {
 export interface HPCItem {
   title: string;
   iconKey: string;
-  points: string[];
+  points: Array<string | SourceLinkedValue>;
 }
 
 /** Individual roadmap improvement item */
