@@ -3,6 +3,8 @@ import { Share2, Grid, Clock, AlertTriangle, Zap, Network, GitGraph, Activity } 
 import { useData } from '../contexts/DataContext';
 import type { HPCItem } from '../types';
 import { ICON_MAP } from '../constants';
+import SourceBadge from './SourceBadge';
+import { claimText, hasSourceMetadata } from '../utils/sourceClaims';
 
 const HPCSection: React.FC = () => {
   const { hpcChecklist } = useData();
@@ -408,7 +410,7 @@ const HPCSection: React.FC = () => {
                         className="text-sm text-slate-400 flex items-start gap-2 leading-relaxed"
                       >
                         <span className="text-cyan-500 mt-1.5 w-1 h-1 bg-cyan-500 rounded-full shrink-0"></span>
-                        {pt}
+                        <span>{claimText(pt)}</span>{hasSourceMetadata(pt) && <SourceBadge claim={pt} className="ml-2" />}
                       </li>
                     ))}
                   </ul>

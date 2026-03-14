@@ -3,6 +3,8 @@ import { Activity, Zap, TrendingUp, AlertTriangle } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
 import { PERFORMANCE_SECTION_CONTENT } from '../content/performance';
 import { MetricStatCard, ChartPanel, HorizontalBarComparisonChart } from '../shared/visualization';
+import SourceBadge from './SourceBadge';
+import { claimText, hasSourceMetadata } from '../utils/sourceClaims';
 
 const ICON_BY_KEY = {
   activity: Activity,
@@ -24,7 +26,7 @@ const PerformanceSection: React.FC = () => {
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
               {PERFORMANCE_SECTION_CONTENT.title}
             </h2>
-            <p className="text-slate-400 max-w-2xl">{PERFORMANCE_SECTION_CONTENT.subtitle}</p>
+            <p className="text-slate-400 max-w-2xl">{claimText(PERFORMANCE_SECTION_CONTENT.subtitle)}{hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.subtitle) && <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.subtitle} className="ml-2" />}</p>
           </div>
           <div className="flex items-center gap-2 text-red-500 animate-pulse">
             <div className="w-2 h-2 bg-red-500 rounded-full"></div>
@@ -41,7 +43,7 @@ const PerformanceSection: React.FC = () => {
               label={stat.label}
               value={stat.value}
               unit={stat.unit}
-              trend={stat.trend}
+              trend={claimText(stat.trend)}
               icon={ICON_BY_KEY[stat.iconKey]}
             />
           ))}
@@ -50,10 +52,11 @@ const PerformanceSection: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-8">
           <ChartPanel
             title={PERFORMANCE_SECTION_CONTENT.charts.bandwidth.title}
-            subtitle={PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle}
+            subtitle={claimText(PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle)}
+            footer={hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle) ? <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle} /> : undefined}
           >
             <HorizontalBarComparisonChart
-              data={performanceData}
+              data={performanceData.map((item) => ({ ...item, name: claimText(item.name) }))}
               dataKey="efficiency"
               valueUnit="%"
               xDomain={[0, 100]}
@@ -62,10 +65,11 @@ const PerformanceSection: React.FC = () => {
 
           <ChartPanel
             title={PERFORMANCE_SECTION_CONTENT.charts.failover.title}
-            subtitle={PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle}
+            subtitle={claimText(PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle)}
+            footer={hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle) ? <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle} /> : undefined}
             icon={AlertTriangle}
           >
-            <HorizontalBarComparisonChart data={failoverData} dataKey="delay" valueUnit="ms" />
+            <HorizontalBarComparisonChart data={failoverData.map((item) => ({ ...item, name: claimText(item.name) }))} dataKey="delay" valueUnit="ms" />
           </ChartPanel>
         </div>
       </div>

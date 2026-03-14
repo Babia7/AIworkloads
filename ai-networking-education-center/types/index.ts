@@ -1,6 +1,7 @@
 
 export type { NavItem, AppConfig, HomeModule } from './ui';
 export type {
+  SourceLinkedValue,
   ProductVariant, ProductFeature, ProductData,
   ChartData,
   ConceptData, ScalingConcept,

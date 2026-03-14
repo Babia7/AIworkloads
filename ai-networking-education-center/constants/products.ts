@@ -1,5 +1,14 @@
 
 import { ProductData } from '../types';
+import { claim } from '../utils/sourceClaims';
+
+
+const PRODUCT_DATASHEET_SOURCE = {
+  sourceUrl: 'https://www.arista.com/en/products/ethernet-switches',
+  sourceTitle: 'Arista Ethernet Switch Portfolio',
+  sourceRevisionOrDate: 'Accessed 2026-03',
+  verificationStatus: 'vendor-claim' as const,
+};
 
 export const PRODUCTS: ProductData[] = [
   {
@@ -7,8 +16,8 @@ export const PRODUCTS: ProductData[] = [
     series: '7060X Series',
     role: 'AI Leaf or Spine',
     iconKey: "Server",
-    desc: 'High-capacity, low-latency Ethernet switching deployable as an AI leaf or spine in smaller fabrics. Fixed form factors ideal for high-scale AI clusters and high-radix topologies. Support for LPO and PCIe integration.',
-    specs: ['51.2T Capacity', 'Tomahawk5', '800G OSFP', 'LPO Support'],
+    desc: claim('High-capacity, low-latency Ethernet switching deployable as an AI leaf or spine in smaller fabrics. Fixed form factors ideal for high-scale AI clusters and high-radix topologies. Support for LPO and PCIe integration.', PRODUCT_DATASHEET_SOURCE),
+    specs: [claim('51.2T Capacity', PRODUCT_DATASHEET_SOURCE), claim('Tomahawk5', PRODUCT_DATASHEET_SOURCE), claim('800G OSFP', PRODUCT_DATASHEET_SOURCE), claim('LPO Support', PRODUCT_DATASHEET_SOURCE)],
     scale: 'AI Leaf & Spine Fabrics',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7060X6-Datasheet.pdf',
     keyFeatures: [
@@ -27,8 +36,8 @@ export const PRODUCTS: ProductData[] = [
     series: '7800R Series',
     role: 'Modular AI Spine',
     iconKey: "Layers",
-    desc: 'The definitive modular platform for large-scale AI spines. Delivers up to 460 Tbps system capacity with a lossless, cell-based fabric and Virtual Output Queuing (VOQ) to eliminate head-of-line blocking.',
-    specs: ['Jericho Silicon', '460 Tbps Capacity', '576x 800G Ports', 'Deep Buffers'],
+    desc: claim('The definitive modular platform for large-scale AI spines. Delivers up to 460 Tbps system capacity with a lossless, cell-based fabric and Virtual Output Queuing (VOQ) to eliminate head-of-line blocking.', PRODUCT_DATASHEET_SOURCE),
+    specs: [claim('Jericho Silicon', PRODUCT_DATASHEET_SOURCE), claim('460 Tbps Capacity', PRODUCT_DATASHEET_SOURCE), claim('576x 800G Ports', PRODUCT_DATASHEET_SOURCE), claim('Deep Buffers', PRODUCT_DATASHEET_SOURCE)],
     scale: 'Large Scale Clusters',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7800R4-Series-AI-Spine-Datasheet.pdf',
     keyFeatures: [
@@ -51,8 +60,8 @@ export const PRODUCTS: ProductData[] = [
     series: '7700R DES',
     role: 'Distributed Switch',
     iconKey: "CircuitBoard",
-    desc: 'Distributed Etherlink Switch (DES) enables the scale of a multi-stage CLOS fabric with the simplicity of a single logical node. Provides a single-hop, predictable, and lossless interconnect for massive AI clusters.',
-    specs: ['Single-Hop Architecture', '100% Non-blocking', 'Auto-tuned fabric', 'Reduce optic power by 50%'],
+    desc: claim('Distributed Etherlink Switch (DES) enables the scale of a multi-stage CLOS fabric with the simplicity of a single logical node. Provides a single-hop, predictable, and lossless interconnect for massive AI clusters.', PRODUCT_DATASHEET_SOURCE),
+    specs: [claim('Single-Hop Architecture', PRODUCT_DATASHEET_SOURCE), claim('100% Non-blocking', PRODUCT_DATASHEET_SOURCE), claim('Auto-tuned fabric', PRODUCT_DATASHEET_SOURCE), claim('Reduce optic power by 50%', PRODUCT_DATASHEET_SOURCE)],
     scale: 'Ultra-Large Scale (Single Hop)',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7800R4-Series-AI-Spine-Datasheet.pdf',
     keyFeatures: [
@@ -71,8 +80,8 @@ export const PRODUCTS: ProductData[] = [
     series: '7280R3 Series',
     role: 'Universal Leaf for Storage',
     iconKey: "HardDrive",
-    desc: 'Purpose-built for IP storage and data-intensive workloads. Features dynamic deep packet buffers (up to 8GB) that absorb microbursts common in storage environments (NVMe-oF, iSCSI). Utilizes VOQ to ensure lossless behavior under congestion.',
-    specs: ['Jericho 2', 'Deep Buffers', '100G/400G', 'VOQ Architecture'],
+    desc: claim('Purpose-built for IP storage and data-intensive workloads. Features dynamic deep packet buffers (up to 8GB) that absorb microbursts common in storage environments (NVMe-oF, iSCSI). Utilizes VOQ to ensure lossless behavior under congestion.', PRODUCT_DATASHEET_SOURCE),
+    specs: [claim('Jericho 2', PRODUCT_DATASHEET_SOURCE), claim('Deep Buffers', PRODUCT_DATASHEET_SOURCE), claim('100G/400G', PRODUCT_DATASHEET_SOURCE), claim('VOQ Architecture', PRODUCT_DATASHEET_SOURCE)],
     scale: 'Storage & WAN Edge',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Datasheet.pdf',
     keyFeatures: [
@@ -90,8 +99,8 @@ export const PRODUCTS: ProductData[] = [
     series: '7280R3A Series',
     role: 'Universal Leaf for Storage',
     iconKey: "Database",
-    desc: 'Evolution of the R3 series delivering higher density and power efficiency for AI storage fabrics. Features ultra-deep buffers and deeper buffer pools for lossless AI training data retrieval and high-density storage fabrics.',
-    specs: ['Jericho 2C+', 'Algorithmic ACLs', '400G High Density', 'In-band Telemetry'],
+    desc: claim('Evolution of the R3 series delivering higher density and power efficiency for AI storage fabrics. Features ultra-deep buffers and deeper buffer pools for lossless AI training data retrieval and high-density storage fabrics.', PRODUCT_DATASHEET_SOURCE),
+    specs: [claim('Jericho 2C+', PRODUCT_DATASHEET_SOURCE), claim('Algorithmic ACLs', PRODUCT_DATASHEET_SOURCE), claim('400G High Density', PRODUCT_DATASHEET_SOURCE), claim('In-band Telemetry', PRODUCT_DATASHEET_SOURCE)],
     scale: 'AI Storage Fabrics',
     datasheetUrl: 'https://www.arista.com/assets/data/pdf/Datasheets/7280R3A-Modular-Datasheet.pdf',
     keyFeatures: [

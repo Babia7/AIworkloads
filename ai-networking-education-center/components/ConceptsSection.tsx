@@ -5,6 +5,8 @@ import { ICON_MAP } from '../constants';
 import { Cpu, Database, Server, MessageSquare, ArrowLeftRight, CheckCircle2, Network, Layers, ArrowRight } from 'lucide-react';
 import GlossaryTerm from './GlossaryTerm';
 import { CONCEPTS_SECTION_CONTENT } from '../content/concepts';
+import SourceBadge from './SourceBadge';
+import { claimText, hasSourceMetadata } from '../utils/sourceClaims';
 
 const ConceptsSection: React.FC = () => {
   const { coreConcepts } = useData();
@@ -27,7 +29,7 @@ const ConceptsSection: React.FC = () => {
           <div className="text-purple-500 font-mono text-xs uppercase tracking-widest mb-4">{CONCEPTS_SECTION_CONTENT.moduleLabel}</div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{CONCEPTS_SECTION_CONTENT.title}</h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
-            {CONCEPTS_SECTION_CONTENT.subtitle}
+            {claimText(CONCEPTS_SECTION_CONTENT.subtitle)}{hasSourceMetadata(CONCEPTS_SECTION_CONTENT.subtitle) && <SourceBadge claim={CONCEPTS_SECTION_CONTENT.subtitle} className="ml-2" />}
           </p>
         </div>
 
@@ -49,7 +51,8 @@ const ConceptsSection: React.FC = () => {
                 </div>
 
                 <p className="text-slate-300 mb-8 leading-relaxed">
-                    {rdma.description}
+                    {claimText(rdma.description)}
+                    {hasSourceMetadata(rdma.description) && <SourceBadge claim={rdma.description} className="ml-2 align-middle" />}
                 </p>
 
                 {/* RDMA Animation Visual */}
@@ -83,14 +86,14 @@ const ConceptsSection: React.FC = () => {
                             <div className="w-12 h-1 bg-slate-600"></div>
                         </div>
                     </div>
-                    <div className="text-center text-xs text-green-400 mt-2 font-semibold">{CONCEPTS_SECTION_CONTENT.rdmaVisualization.bypassCaption}</div>
+                    <div className="text-center text-xs text-green-400 mt-2 font-semibold">{claimText(CONCEPTS_SECTION_CONTENT.rdmaVisualization.bypassCaption)} {hasSourceMetadata(CONCEPTS_SECTION_CONTENT.rdmaVisualization.bypassCaption) && <SourceBadge claim={CONCEPTS_SECTION_CONTENT.rdmaVisualization.bypassCaption} />}</div>
                 </div>
 
                 <ul className="space-y-3">
                     {rdma.features.map((feature, i) => (
                         <li key={i} className="flex items-center gap-3 text-slate-300">
                             <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                            {feature}
+                            {claimText(feature)}{hasSourceMetadata(feature) && <SourceBadge claim={feature} className="ml-2" />}
                         </li>
                     ))}
                 </ul>
@@ -112,7 +115,7 @@ const ConceptsSection: React.FC = () => {
                   </div>
                 </div>
 
-                <p className="text-slate-300 mb-8 leading-relaxed">{roce.description}</p>
+                <p className="text-slate-300 mb-8 leading-relaxed">{claimText(roce.description)}{hasSourceMetadata(roce.description) && <SourceBadge claim={roce.description} className="ml-2 align-middle" />}</p>
 
                 {/* Protocol Stack Visual */}
                 <div
@@ -153,7 +156,7 @@ const ConceptsSection: React.FC = () => {
                   {roce.features.map((feature: string, i: number) => (
                     <li key={i} className="flex items-center gap-3 text-slate-300">
                       <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                      {feature}
+                      {claimText(feature)}{hasSourceMetadata(feature) && <SourceBadge claim={feature} className="ml-2" />}
                     </li>
                   ))}
                 </ul>
@@ -178,7 +181,7 @@ const ConceptsSection: React.FC = () => {
 
             <div className="grid lg:grid-cols-2 gap-8 items-start">
               <div>
-                <p className="text-slate-300 mb-6 leading-relaxed">{nvme.description}</p>
+                <p className="text-slate-300 mb-6 leading-relaxed">{claimText(nvme.description)}{hasSourceMetadata(nvme.description) && <SourceBadge claim={nvme.description} className="ml-2 align-middle" />}</p>
 
                 {/* NVMe-oF Expansion */}
                 <div className="bg-purple-900/10 p-5 rounded-xl border border-purple-500/20 mb-6">
@@ -187,14 +190,14 @@ const ConceptsSection: React.FC = () => {
                   </h4>
                   <div className="space-y-4 text-sm text-slate-300">
                     <p>
-                      <span className="text-white font-medium">{CONCEPTS_SECTION_CONTENT.nvmeExpansion.goalLabel}</span> {CONCEPTS_SECTION_CONTENT.nvmeExpansion.goalBody}
+                      <span className="text-white font-medium">{CONCEPTS_SECTION_CONTENT.nvmeExpansion.goalLabel}</span> {claimText(CONCEPTS_SECTION_CONTENT.nvmeExpansion.goalBody)} {hasSourceMetadata(CONCEPTS_SECTION_CONTENT.nvmeExpansion.goalBody) && <SourceBadge claim={CONCEPTS_SECTION_CONTENT.nvmeExpansion.goalBody} />}
                     </p>
                     <p>
                       <span className="text-white font-medium">{CONCEPTS_SECTION_CONTENT.nvmeExpansion.mechanismLabel}</span> {CONCEPTS_SECTION_CONTENT.nvmeExpansion.mechanismBodyPrefix} <span className="text-purple-200">FibreChannel</span>, <GlossaryTerm term="RoCEv2"><span className="text-purple-200">RoCE</span></GlossaryTerm>, {CONCEPTS_SECTION_CONTENT.nvmeExpansion.mechanismBodySuffix} <span className="text-purple-200">TCP/IP</span>.
                     </p>
                     <div className="flex items-center gap-2 p-2 bg-slate-950/50 rounded border border-purple-500/10 text-xs">
                       <Layers size={14} className="text-purple-400 shrink-0" />
-                      <span>{CONCEPTS_SECTION_CONTENT.nvmeExpansion.abstractionNote}</span>
+                      <span>{claimText(CONCEPTS_SECTION_CONTENT.nvmeExpansion.abstractionNote)}</span>{hasSourceMetadata(CONCEPTS_SECTION_CONTENT.nvmeExpansion.abstractionNote) && <SourceBadge claim={CONCEPTS_SECTION_CONTENT.nvmeExpansion.abstractionNote} />}
                     </div>
                   </div>
                 </div>
@@ -203,7 +206,7 @@ const ConceptsSection: React.FC = () => {
                   {nvme.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-3 text-slate-300">
                       <div className="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
-                      {feature}
+                      {claimText(feature)}{hasSourceMetadata(feature) && <SourceBadge claim={feature} className="ml-2" />}
                     </li>
                   ))}
                 </ul>
@@ -228,7 +231,7 @@ const ConceptsSection: React.FC = () => {
                       <div>
                         <div className="text-xs text-purple-300 font-bold mb-1">HOST <span className="text-slate-500 mx-1">→</span> CONTROLLER</div>
                         <div className="text-white text-sm font-medium">{CONCEPTS_SECTION_CONTENT.packetFlow.connectionRequestTitle}</div>
-                        <div className="text-xs text-slate-500">{CONCEPTS_SECTION_CONTENT.packetFlow.connectionRequestBody}</div>
+                        <div className="text-xs text-slate-500">{claimText(CONCEPTS_SECTION_CONTENT.packetFlow.connectionRequestBody)}{hasSourceMetadata(CONCEPTS_SECTION_CONTENT.packetFlow.connectionRequestBody) && <SourceBadge claim={CONCEPTS_SECTION_CONTENT.packetFlow.connectionRequestBody} className="ml-2" />}</div>
                       </div>
                     </div>
                   </div>
@@ -240,7 +243,7 @@ const ConceptsSection: React.FC = () => {
                       <div>
                         <div className="text-xs text-purple-300 font-bold mb-1">CONTROLLER <span className="text-slate-500 mx-1">→</span> HOST</div>
                         <div className="text-white text-sm font-medium">{CONCEPTS_SECTION_CONTENT.packetFlow.connectionResponseTitle}</div>
-                        <div className="text-xs text-slate-500">{CONCEPTS_SECTION_CONTENT.packetFlow.connectionResponseBody}</div>
+                        <div className="text-xs text-slate-500">{claimText(CONCEPTS_SECTION_CONTENT.packetFlow.connectionResponseBody)}{hasSourceMetadata(CONCEPTS_SECTION_CONTENT.packetFlow.connectionResponseBody) && <SourceBadge claim={CONCEPTS_SECTION_CONTENT.packetFlow.connectionResponseBody} className="ml-2" />}</div>
                       </div>
                     </div>
                   </div>
@@ -252,7 +255,7 @@ const ConceptsSection: React.FC = () => {
                       <div>
                         <div className="text-xs text-purple-300 font-bold mb-1">{CONCEPTS_SECTION_CONTENT.packetFlow.exchangePduLabel}</div>
                         <div className="text-white text-sm font-medium">{CONCEPTS_SECTION_CONTENT.packetFlow.initConfirmTitle}</div>
-                        <div className="text-xs text-slate-500">{CONCEPTS_SECTION_CONTENT.packetFlow.initConfirmBody}</div>
+                        <div className="text-xs text-slate-500">{claimText(CONCEPTS_SECTION_CONTENT.packetFlow.initConfirmBody)}{hasSourceMetadata(CONCEPTS_SECTION_CONTENT.packetFlow.initConfirmBody) && <SourceBadge claim={CONCEPTS_SECTION_CONTENT.packetFlow.initConfirmBody} className="ml-2" />}</div>
                       </div>
                     </div>
                   </div>
@@ -261,7 +264,7 @@ const ConceptsSection: React.FC = () => {
                 <div className="mt-6 pt-4 border-t border-slate-800/50 flex items-start gap-3">
                   <CheckCircle2 size={16} className="text-green-500 shrink-0 mt-0.5" aria-hidden="true" />
                   <p className="text-xs text-slate-400">
-                    {CONCEPTS_SECTION_CONTENT.packetFlow.transparencyPrefix} <strong>{CONCEPTS_SECTION_CONTENT.packetFlow.transparentWord}</strong> {CONCEPTS_SECTION_CONTENT.packetFlow.transparencySuffix}
+                    {CONCEPTS_SECTION_CONTENT.packetFlow.transparencyPrefix} <strong>{CONCEPTS_SECTION_CONTENT.packetFlow.transparentWord}</strong> {claimText(CONCEPTS_SECTION_CONTENT.packetFlow.transparencySuffix)} {hasSourceMetadata(CONCEPTS_SECTION_CONTENT.packetFlow.transparencySuffix) && <SourceBadge claim={CONCEPTS_SECTION_CONTENT.packetFlow.transparencySuffix} className="ml-2" />}
                   </p>
                 </div>
               </div>
