@@ -11,8 +11,10 @@ interface State {
 }
 
 class ErrorBoundary extends React.Component<Props, State> {
+  declare props: Props;
+
   public state: State = {
-    hasError: false
+    hasError: false,
   };
 
   public static getDerivedStateFromError(error: Error): State {
@@ -20,16 +22,15 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   private handleReset = () => {
-    // Hard reset: Clear storage and reload
     localStorage.clear();
     window.location.reload();
   };
 
-  public render() {
+  public render(): ReactNode {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-[#0F1117] flex items-center justify-center p-6 text-center">
@@ -39,14 +40,15 @@ class ErrorBoundary extends React.Component<Props, State> {
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">Something went wrong</h2>
             <p className="text-slate-400 mb-6 text-sm leading-relaxed">
-              The application encountered an unexpected error. This is likely due to a data mismatch or a temporary glitch.
+              The application encountered an unexpected error. This is likely due to a data mismatch
+              or a temporary glitch.
             </p>
-            
+
             <div className="bg-black/30 p-3 rounded text-xs font-mono text-red-300 mb-6 text-left overflow-auto max-h-32 border border-red-900/30">
-                {this.state.error?.message || "Unknown error"}
+              {this.state.error?.message || 'Unknown error'}
             </div>
 
-            <button 
+            <button
               onClick={this.handleReset}
               className="w-full py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all"
             >
@@ -58,7 +60,7 @@ class ErrorBoundary extends React.Component<Props, State> {
       );
     }
 
-    return this.props.children;
+    return this.props.children ?? null;
   }
 }
 

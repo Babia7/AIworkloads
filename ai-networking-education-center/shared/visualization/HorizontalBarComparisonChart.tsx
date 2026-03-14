@@ -8,9 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-  TooltipProps
 } from 'recharts';
-import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent';
 
 interface HorizontalBarComparisonChartProps {
   data: Array<{ name: string; fill: string; [key: string]: string | number }>;
@@ -19,13 +17,24 @@ interface HorizontalBarComparisonChartProps {
   xDomain?: [number, number];
 }
 
-const CustomTooltip = ({ active, payload, label, unit }: TooltipProps<ValueType, NameType> & { unit: string }) => {
-  if (active && payload && payload.length) {
+interface TooltipPayloadItem {
+  value?: number | string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+  label?: string;
+  unit: string;
+}
+
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label, unit }) => {
+  if (active && payload && payload.length > 0) {
     return (
       <div className="bg-[#1e293b] border border-slate-700 p-3 rounded shadow-2xl">
         <p className="text-slate-200 font-mono text-xs mb-1">{label}</p>
         <p className="text-blue-400 font-bold font-mono">
-          {payload[0].value} {unit}
+          {payload[0]?.value} {unit}
         </p>
       </div>
     );
@@ -38,7 +47,7 @@ const HorizontalBarComparisonChart: React.FC<HorizontalBarComparisonChartProps> 
   data,
   dataKey,
   valueUnit,
-  xDomain
+  xDomain,
 }) => {
   return (
     <ResponsiveContainer width="100%" height="100%">

@@ -1,4 +1,3 @@
-
 export { ICON_MAP } from './icons';
 export { NAVIGATION } from './navigation';
 export { GLOSSARY } from './glossary';
@@ -9,3 +8,5 @@ export { PERFORMANCE_DATA, FAILOVER_DATA } from './performance';
 export { COMPARISON_TABLE } from './comparison';
 export { PRODUCTS } from './products';
 export { FUTURE_IMPROVEMENTS } from './future';
+
+export { HPC_CHECKLIST_DEFAULT } from './hpcChecklist';
