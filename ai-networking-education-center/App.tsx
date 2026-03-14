@@ -8,20 +8,11 @@ import Footer from './components/Footer';
 import FadeIn from './components/FadeIn';
 import AdminDashboard from './components/AdminDashboard';
 import ErrorBoundary from './components/ErrorBoundary';
+import { MODULE_REGISTRY } from './app/moduleRegistry';
 
 // Static Imports for Sections
 // We use static imports here instead of React.lazy/Suspense to ensure 
 // anchor links (#id) work immediately on page load without layout shift.
-import ArchitectureSection from './components/ArchitectureSection';
-import ConceptsSection from './components/ConceptsSection';
-import ProtocolsSection from './components/ProtocolsSection';
-import ProtocolDeepDive from './components/ProtocolDeepDive';
-import ComparisonTable from './components/ComparisonTable';
-import PerformanceSection from './components/PerformanceSection';
-import HardwareSection from './components/HardwareSection';
-import OperationsPlaybooksSection from './components/OperationsPlaybooksSection';
-import HPCSection from './components/HPCSection';
-import GlossarySection from './components/GlossarySection';
 
 /**
  * AppContent
@@ -45,45 +36,11 @@ const AppContent: React.FC = () => {
         <HomeDashboard />
         
         {/* Educational Modules (Scrollable) */}
-        <FadeIn>
-          <ArchitectureSection />
-        </FadeIn>
-        
-        <FadeIn>
-          <ConceptsSection />
-        </FadeIn>
-        
-        <FadeIn>
-          <ProtocolsSection />
-        </FadeIn>
-        
-        <FadeIn>
-          <ProtocolDeepDive />
-        </FadeIn>
-        
-        <FadeIn>
-          <ComparisonTable />
-        </FadeIn>
-        
-        <FadeIn>
-          <PerformanceSection />
-        </FadeIn>
-        
-        <FadeIn>
-          <OperationsPlaybooksSection />
-        </FadeIn>
-
-        <FadeIn>
-          <HardwareSection />
-        </FadeIn>
-        
-        <FadeIn>
-          <HPCSection />
-        </FadeIn>
-
-        <FadeIn>
-          <GlossarySection />
-        </FadeIn>
+        {MODULE_REGISTRY.map(({ id, component: SectionComponent }) => (
+          <FadeIn key={id}>
+            <SectionComponent />
+          </FadeIn>
+        ))}
         
       </main>
       

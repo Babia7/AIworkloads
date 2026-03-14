@@ -5,6 +5,7 @@ import {
   PERFORMANCE_DATA, FAILOVER_DATA, PROTOCOL_CONCEPTS, SCALING_CONCEPTS, CORE_CONCEPTS, COMPARISON_TABLE
 } from '../constants';
 import { ProductData, AppConfig, HomeModule, ChartData, FeedbackItem, ScalingConcept, ConceptData, ComparisonRow } from '../types';
+import { usePersistedReducer } from '../hooks/usePersistedReducer';
 
 /**
  * DataContext Architecture
@@ -74,6 +75,27 @@ interface DataContextType {
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
+const APP_SCHEMA_VERSION = '3.10';
+
+type PerformanceAction =
+  | { type: 'performanceDataUpdated'; payload: ChartData[] }
+  | { type: 'failoverDataUpdated'; payload: ChartData[] };
+
+interface PerformanceState {
+  performanceData: ChartData[];
+  failoverData: ChartData[];
+}
+
+const performanceReducer = (state: PerformanceState, action: PerformanceAction): PerformanceState => {
+  switch (action.type) {
+    case 'performanceDataUpdated':
+      return { ...state, performanceData: action.payload };
+    case 'failoverDataUpdated':
+      return { ...state, failoverData: action.payload };
+    default:
+      return state;
+  }
+};
 
 // Initial HPC Checklist Data (Default State)
 const INITIAL_HPC_CHECKLIST = [
@@ -134,7 +156,7 @@ const INITIAL_HPC_CHECKLIST = [
 const loadState = <T,>(key: string, fallback: T): T => {
   try {
     const version = localStorage.getItem('app_version');
-    if (version !== '3.10') { // Bumped version for new schema
+    if (version !== APP_SCHEMA_VERSION) { // Bumped version for new schema
       return fallback;
     }
     const saved = localStorage.getItem(key);
@@ -166,8 +188,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [futureImprovements, setFutureImprovements] = useState<typeof FUTURE_IMPROVEMENTS>(() => loadState('app_future', FUTURE_IMPROVEMENTS));
   const [appConfig, setAppConfig] = useState<AppConfig>(() => loadState('app_config', DEFAULT_APP_CONFIG));
   const [homeModules, setHomeModules] = useState<HomeModule[]>(() => loadState('app_home_modules', DEFAULT_HOME_MODULES));
-  const [performanceData, setPerformanceData] = useState<ChartData[]>(() => loadState('app_perf_data', PERFORMANCE_DATA));
-  const [failoverData, setFailoverData] = useState<ChartData[]>(() => loadState('app_failover_data', FAILOVER_DATA));
+  const [performanceState, dispatchPerformance] = usePersistedReducer<PerformanceState, PerformanceAction>(
+    'app_performance_state',
+    performanceReducer,
+    {
+      performanceData: PERFORMANCE_DATA,
+      failoverData: FAILOVER_DATA
+    },
+    { version: APP_SCHEMA_VERSION }
+  );
+  const { performanceData, failoverData } = performanceState;
   const [protocolConcepts, setProtocolConcepts] = useState<any[]>(() => loadState('app_protocols', PROTOCOL_CONCEPTS));
   const [hpcChecklist, setHpcChecklist] = useState<any[]>(() => loadState('app_hpc_checklist', INITIAL_HPC_CHECKLIST));
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>(() => loadState('app_feedback', []));
@@ -183,8 +213,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => { localStorage.setItem('app_future', JSON.stringify(futureImprovements)); }, [futureImprovements]);
   useEffect(() => { localStorage.setItem('app_config', JSON.stringify(appConfig)); }, [appConfig]);
   useEffect(() => { localStorage.setItem('app_home_modules', JSON.stringify(homeModules)); }, [homeModules]);
-  useEffect(() => { localStorage.setItem('app_perf_data', JSON.stringify(performanceData)); }, [performanceData]);
-  useEffect(() => { localStorage.setItem('app_failover_data', JSON.stringify(failoverData)); }, [failoverData]);
   useEffect(() => { localStorage.setItem('app_protocols', JSON.stringify(protocolConcepts)); }, [protocolConcepts]);
   useEffect(() => { localStorage.setItem('app_hpc_checklist', JSON.stringify(hpcChecklist)); }, [hpcChecklist]);
   useEffect(() => { localStorage.setItem('app_feedback', JSON.stringify(feedbackList)); }, [feedbackList]);
@@ -196,7 +224,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Set version on mount to confirm successful load for next visit
   useEffect(() => {
-    localStorage.setItem('app_version', '3.10');
+    localStorage.setItem('app_version', APP_SCHEMA_VERSION);
   }, []);
 
   // Update Actions
@@ -205,8 +233,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateFutureImprovements = (val: any) => setFutureImprovements(val);
   const updateAppConfig = (val: any) => setAppConfig(val);
   const updateHomeModules = (val: any) => setHomeModules(val);
-  const updatePerformanceData = (val: any) => setPerformanceData(val);
-  const updateFailoverData = (val: any) => setFailoverData(val);
+  const updatePerformanceData = (val: ChartData[]) => {
+    dispatchPerformance({ type: 'performanceDataUpdated', payload: val });
+  };
+  const updateFailoverData = (val: ChartData[]) => {
+    dispatchPerformance({ type: 'failoverDataUpdated', payload: val });
+  };
   const updateProtocolConcepts = (val: any) => setProtocolConcepts(val);
   const updateHpcChecklist = (val: any) => setHpcChecklist(val);
   const updateScalingConcepts = (val: any) => setScalingConcepts(val);
@@ -233,7 +265,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const resetToDefaults = () => {
     if (window.confirm('Are you sure you want to reset all data to factory defaults? This cannot be undone.')) {
       localStorage.clear();
-      localStorage.setItem('app_version', '3.10');
+      localStorage.setItem('app_version', APP_SCHEMA_VERSION);
       window.location.reload();
     }
   };
