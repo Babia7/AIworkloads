@@ -1,5 +1,6 @@
 import { HPCItem } from '../types';
 import { claim } from '../utils/sourceClaims';
+import { claimTextById } from '../content/claims/performanceClaims';
 
 const AI_NETWORKING_SOURCE = {
   sourceUrl: 'https://www.arista.com/en/solutions/ai-networking',
@@ -31,7 +32,10 @@ export const HPC_CHECKLIST_DEFAULT: HPCItem[] = [
     title: 'GPU Scale-Out',
     iconKey: 'Network',
     points: [
-      claim('Scale to 10k+ GPUs with deterministic latency.', AI_NETWORKING_SOURCE),
+      claim(
+        `Scale to ${claimTextById('hpcScaleOutGpuCount')} GPUs with deterministic latency.`,
+        AI_NETWORKING_SOURCE
+      ),
       claim('Ultra-high radix switches = fewer hops.', AI_NETWORKING_SOURCE),
       claim('Faster collectives across the fabric.', AI_NETWORKING_SOURCE),
     ],

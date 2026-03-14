@@ -1,7 +1,9 @@
 import { claim } from '../utils/sourceClaims';
+import { claimTextById, getPerformanceClaim } from './claims/performanceClaims';
 
 const ETHERLINK_SOURCE = {
-  sourceUrl: 'https://www.arista.com/assets/data/pdf/Whitepapers/Arista-Etherlink-AI-Networking-Architecture-Whitepaper.pdf',
+  sourceUrl:
+    'https://www.arista.com/assets/data/pdf/Whitepapers/Arista-Etherlink-AI-Networking-Architecture-Whitepaper.pdf',
   sourceTitle: 'Arista Etherlink AI Networking Architecture Whitepaper',
   sourceRevisionOrDate: '2024',
   verificationStatus: 'vendor-claim' as const,
@@ -12,47 +14,56 @@ export const PERFORMANCE_SECTION_CONTENT = {
   title: 'Performance Metrics',
   subtitle: claim(
     'Telemetry showing the impact of congestion control and failover on Job Completion Time (JCT).',
-    ETHERLINK_SOURCE
+    ETHERLINK_SOURCE,
+    'perfSectionSubtitle'
   ),
   systemStatusLabel: 'System Active',
   stats: [
     {
       label: 'Effective Throughput',
-      value: '98.4',
+      value: claimTextById('perfEffectiveThroughputPercent'),
       unit: '%',
-      trend: claim('+12% vs Standard', ETHERLINK_SOURCE),
+      trend: getPerformanceClaim('perfThroughputTrendDelta'),
       iconKey: 'activity',
     },
     {
       label: 'Failover Time',
-      value: '3.3',
+      value: claimTextById('perfFailoverTimeMs'),
       unit: 'ms',
-      trend: claim('30x Faster', ETHERLINK_SOURCE),
+      trend: getPerformanceClaim('perfFailoverTrendMultiplier'),
       iconKey: 'zap',
     },
     {
       label: 'Buffer Usage',
-      value: '42',
+      value: claimTextById('perfBufferUsageMb'),
       unit: 'MB',
-      trend: claim('Optimized', ETHERLINK_SOURCE),
+      trend: claim('Optimized', ETHERLINK_SOURCE, 'perfBufferUsageTrend'),
       iconKey: 'zap',
     },
     {
       label: 'JCT Reduction',
-      value: '15',
+      value: claimTextById('perfJctReductionPercent'),
       unit: '%',
-      trend: claim('Consistent', ETHERLINK_SOURCE),
+      trend: claim('Consistent', ETHERLINK_SOURCE, 'perfJctReductionTrend'),
       iconKey: 'trendingUp',
     },
   ],
   charts: {
     bandwidth: {
       title: 'Bandwidth Efficiency',
-      subtitle: claim('Cluster Load Balancing (CLB) vs Standard ECMP', ETHERLINK_SOURCE),
+      subtitle: claim(
+        'Cluster Load Balancing (CLB) vs Standard ECMP',
+        ETHERLINK_SOURCE,
+        'perfBandwidthChartSubtitle'
+      ),
     },
     failover: {
       title: 'Failover Convergence',
-      subtitle: claim('Time to recover from link failure (ms)', ETHERLINK_SOURCE),
+      subtitle: claim(
+        'Time to recover from link failure (ms)',
+        ETHERLINK_SOURCE,
+        'perfFailoverChartSubtitle'
+      ),
     },
   },
 } as const;

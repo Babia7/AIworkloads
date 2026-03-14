@@ -26,7 +26,19 @@ const PerformanceSection: React.FC = () => {
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
               {PERFORMANCE_SECTION_CONTENT.title}
             </h2>
-            <p className="text-slate-400 max-w-2xl">{claimText(PERFORMANCE_SECTION_CONTENT.subtitle)}{hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.subtitle) && <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.subtitle} className="ml-2" />}</p>
+            <p
+              className="text-slate-400 max-w-2xl"
+              data-claim-id={
+                hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.subtitle)
+                  ? PERFORMANCE_SECTION_CONTENT.subtitle.claimId
+                  : undefined
+              }
+            >
+              {claimText(PERFORMANCE_SECTION_CONTENT.subtitle)}
+              {hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.subtitle) && (
+                <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.subtitle} className="ml-2" />
+              )}
+            </p>
           </div>
           <div className="flex items-center gap-2 text-red-500 animate-pulse">
             <div className="w-2 h-2 bg-red-500 rounded-full"></div>
@@ -39,7 +51,7 @@ const PerformanceSection: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {PERFORMANCE_SECTION_CONTENT.stats.map((stat) => (
             <MetricStatCard
-              key={stat.label}
+              key={`${stat.label}-${hasSourceMetadata(stat.trend) ? stat.trend.claimId : 'no-claim-id'}`}
               label={stat.label}
               value={stat.value}
               unit={stat.unit}
@@ -53,7 +65,11 @@ const PerformanceSection: React.FC = () => {
           <ChartPanel
             title={PERFORMANCE_SECTION_CONTENT.charts.bandwidth.title}
             subtitle={claimText(PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle)}
-            footer={hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle) ? <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle} /> : undefined}
+            footer={
+              hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle) ? (
+                <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.charts.bandwidth.subtitle} />
+              ) : undefined
+            }
           >
             <HorizontalBarComparisonChart
               data={performanceData.map((item) => ({ ...item, name: claimText(item.name) }))}
@@ -66,10 +82,18 @@ const PerformanceSection: React.FC = () => {
           <ChartPanel
             title={PERFORMANCE_SECTION_CONTENT.charts.failover.title}
             subtitle={claimText(PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle)}
-            footer={hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle) ? <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle} /> : undefined}
+            footer={
+              hasSourceMetadata(PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle) ? (
+                <SourceBadge claim={PERFORMANCE_SECTION_CONTENT.charts.failover.subtitle} />
+              ) : undefined
+            }
             icon={AlertTriangle}
           >
-            <HorizontalBarComparisonChart data={failoverData.map((item) => ({ ...item, name: claimText(item.name) }))} dataKey="delay" valueUnit="ms" />
+            <HorizontalBarComparisonChart
+              data={failoverData.map((item) => ({ ...item, name: claimText(item.name) }))}
+              dataKey="delay"
+              valueUnit="ms"
+            />
           </ChartPanel>
         </div>
       </div>
