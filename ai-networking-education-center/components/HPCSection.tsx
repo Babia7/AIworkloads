@@ -404,13 +404,15 @@ const HPCSection: React.FC = () => {
                     </h4>
                   </div>
                   <ul className="space-y-3">
-                    {card.points.map((pt: string, j: number) => (
+                    {card.points.map((pt, j: number) => (
                       <li
                         key={j}
                         className="text-sm text-slate-400 flex items-start gap-2 leading-relaxed"
+                        data-claim-id={hasSourceMetadata(pt) ? pt.claimId : undefined}
                       >
                         <span className="text-cyan-500 mt-1.5 w-1 h-1 bg-cyan-500 rounded-full shrink-0"></span>
-                        <span>{claimText(pt)}</span>{hasSourceMetadata(pt) && <SourceBadge claim={pt} className="ml-2" />}
+                        <span>{claimText(pt)}</span>
+                        {hasSourceMetadata(pt) && <SourceBadge claim={pt} className="ml-2" />}
                       </li>
                     ))}
                   </ul>

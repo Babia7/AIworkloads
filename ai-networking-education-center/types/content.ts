@@ -1,5 +1,5 @@
-
 export interface SourceLinkedValue {
+  claimId?: string;
   value: string;
   sourceUrl: string;
   sourceTitle: string;
@@ -11,16 +11,16 @@ export interface SourceLinkedValue {
 export interface ProductVariant {
   name: string;
   chip: string;
-  capacity: string;
-  ports: string;
+  capacity: string | SourceLinkedValue;
+  ports: string | SourceLinkedValue;
   formFactor: string;
 }
 
 /** Highlighted feature metric on a product card */
 export interface ProductFeature {
   label: string;
-  value: string;
-  subtext: string;
+  value: string | SourceLinkedValue;
+  subtext: string | SourceLinkedValue;
   iconKey?: string;
 }
 

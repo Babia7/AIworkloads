@@ -19,7 +19,7 @@ const checks = [
   { file: 'content/concepts.ts', pattern: /\binitConfirmBody:\s*claim\(/g, minimum: 1, label: 'init body claim' },
   { file: 'content/concepts.ts', pattern: /\btransparencySuffix:\s*claim\(/g, minimum: 1, label: 'transparency claim' },
   { file: 'content/performance.ts', pattern: /\bsubtitle:\s*claim\(/g, minimum: 1, label: 'performance subtitle claim' },
-  { file: 'content/performance.ts', pattern: /\btrend:\s*claim\(/g, minimum: 4, label: 'performance trend claims' },
+  { file: 'content/performance.ts', pattern: /\btrend:\s*(?:claim\(|getPerformanceClaim\()/g, minimum: 4, label: 'performance trend claims' },
 ];
 
 const base = process.cwd();

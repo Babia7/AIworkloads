@@ -1,38 +1,45 @@
 steps:
-  # Step 1: Build the Docker image
-  - name: 'gcr.io/cloud-builders/docker'
+  # Step 0: Validate claim-backed numeric literals
+  - name: "node:20"
+    entrypoint: "bash"
     args:
-      - 'build'
-      - '-t'
-      - 'europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads:$COMMIT_SHA'
-      - '-t'
-      - 'europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads:latest'
-      - './ai-networking-education-center'
+      - "-lc"
+      - "cd ai-networking-education-center && npm ci && npm run check:claim-ids"
+
+  # Step 1: Build the Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads:$COMMIT_SHA"
+      - "-t"
+      - "europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads:latest"
+      - "./ai-networking-education-center"
 
   # Step 2: Push both tags
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: "gcr.io/cloud-builders/docker"
     args:
-      - 'push'
-      - '--all-tags'
-      - 'europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads'
+      - "push"
+      - "--all-tags"
+      - "europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads"
 
   # Step 3: Deploy to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
     args:
-      - 'run'
-      - 'deploy'
-      - 'aiworkloads'
-      - '--image'
-      - 'europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads:$COMMIT_SHA'
-      - '--region'
-      - 'europe-west1'
-      - '--project'
-      - 'infralens-486218'
-      - '--allow-unauthenticated'
+      - "run"
+      - "deploy"
+      - "aiworkloads"
+      - "--image"
+      - "europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads:$COMMIT_SHA"
+      - "--region"
+      - "europe-west1"
+      - "--project"
+      - "infralens-486218"
+      - "--allow-unauthenticated"
 
 images:
-  - 'europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads'
+  - "europe-west1-docker.pkg.dev/infralens-486218/cloud-run-source-deploy/aiworkloads"
 
 options:
   logging: CLOUD_LOGGING_ONLY
