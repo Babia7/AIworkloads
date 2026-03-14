@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { DataProvider } from './contexts/DataContext';
 import Navigation from './components/Navigation';
@@ -10,13 +9,9 @@ import AdminDashboard from './components/AdminDashboard';
 import ErrorBoundary from './components/ErrorBoundary';
 import { MODULE_REGISTRY } from './app/moduleRegistry';
 
-// Static Imports for Sections
-// We use static imports here instead of React.lazy/Suspense to ensure 
-// anchor links (#id) work immediately on page load without layout shift.
-
 /**
  * AppContent
- * 
+ *
  * The main layout container.
  * - Manages the visibility of the Admin Dashboard.
  * - Composes the page sections wrapped in FadeIn animations.
@@ -30,20 +25,19 @@ const AppContent: React.FC = () => {
       {/* Global Navigation Elements */}
       <Navigation />
       <TableOfContents />
-      
+
       <main>
         {/* Interactive Bento-Grid Dashboard */}
         <HomeDashboard />
-        
+
         {/* Educational Modules (Scrollable) */}
         {MODULE_REGISTRY.map(({ id, component: SectionComponent }) => (
           <FadeIn key={id}>
             <SectionComponent />
           </FadeIn>
         ))}
-        
       </main>
-      
+
       {/* Footer & Admin Triggers */}
       <Footer onAdminClick={() => setIsAdminOpen(true)} />
       <AdminDashboard isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
@@ -53,7 +47,7 @@ const AppContent: React.FC = () => {
 
 /**
  * Root App Component
- * 
+ *
  * Wraps the application in the DataProvider to expose the
  * "Client-Side CMS" capabilities (dynamic content editing).
  * Now wrapped in ErrorBoundary to catch crashes.
