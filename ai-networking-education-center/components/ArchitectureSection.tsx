@@ -4,6 +4,8 @@ import { useData } from '../contexts/DataContext';
 import { ICON_MAP } from '../constants';
 import { Layers, Server, GitMerge, ArrowRight } from 'lucide-react';
 import GlossaryTerm from './GlossaryTerm';
+import SourceBadge from './SourceBadge';
+import { claimText, hasSourceMetadata } from '../utils/sourceClaims';
 
 const ArchitectureSection: React.FC = () => {
   const { scalingConcepts } = useData();
@@ -32,9 +34,18 @@ const ArchitectureSection: React.FC = () => {
                   <Icon size={24} />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">{concept.title}</h3>
-                <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-4 border-l-2 border-blue-500 pl-3">{concept.desc}</div>
+                <div
+                  className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-4 border-l-2 border-blue-500 pl-3"
+                  data-claim-id={hasSourceMetadata(concept.desc) ? concept.desc.claimId : undefined}
+                >
+                  {claimText(concept.desc)}
+                  {hasSourceMetadata(concept.desc) && <SourceBadge claim={concept.desc} className="ml-2" />}
+                </div>
                 <p className="text-slate-400 leading-relaxed text-sm">
-                  {concept.details}
+                  {claimText(concept.details)}
+                  {hasSourceMetadata(concept.details) && (
+                    <SourceBadge claim={concept.details} className="ml-2 align-middle" />
+                  )}
                 </p>
               </div>
             );
