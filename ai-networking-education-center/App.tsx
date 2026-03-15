@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { DataProvider } from './contexts/DataContext';
 import Navigation from './components/Navigation';
 import HomeDashboard from './components/HomeDashboard';
@@ -33,7 +33,11 @@ const AppContent: React.FC = () => {
         {/* Educational Modules (Scrollable) */}
         {MODULE_REGISTRY.map(({ id, component: SectionComponent }) => (
           <FadeIn key={id}>
-            <SectionComponent />
+            <Suspense
+              fallback={<div className="container mx-auto px-6 py-10 text-sm text-slate-500">Loading section...</div>}
+            >
+              <SectionComponent />
+            </Suspense>
           </FadeIn>
         ))}
       </main>
