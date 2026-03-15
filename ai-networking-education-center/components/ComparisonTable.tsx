@@ -14,12 +14,12 @@ const ComparisonTable: React.FC = () => {
                 <div className="text-emerald-500 font-mono text-xs uppercase tracking-widest mb-4">Module 04</div>
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Legacy vs. Modern</h2>
                 <p className="text-slate-400 max-w-2xl">
-                    Why the industry is moving from InfiniBand to Ultra Ethernet (UEC) for AI workloads.
+                    A practical comparison of established fabrics and emerging Ultra Ethernet Direction (UEC) design goals for AI workloads.
                 </p>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                 <ShieldCheck size={18} className="text-emerald-400" />
-                <span className="text-emerald-400 font-mono text-xs font-bold uppercase">UEC 1.0 Compliant</span>
+                <span className="text-emerald-400 font-mono text-xs font-bold uppercase">UEC-inspired capabilities</span>
             </div>
         </div>
 
@@ -29,8 +29,8 @@ const ComparisonTable: React.FC = () => {
               <thead>
                 <tr className="bg-[#0d1117] border-b border-white/5">
                   <th className="p-6 text-slate-500 font-mono text-xs uppercase tracking-wider w-1/3">Feature Criterion</th>
-                  <th className="p-6 text-red-400 font-mono text-xs uppercase tracking-wider border-l border-white/5 w-1/3">Traditional Lossless Protocols (InfiniBand)</th>
-                  <th className="p-6 text-emerald-400 font-mono text-xs uppercase tracking-wider bg-emerald-500/5 border-l border-emerald-500/20 w-1/3">Ultra Ethernet (UEC)</th>
+                  <th className="p-6 text-red-400 font-mono text-xs uppercase tracking-wider border-l border-white/5 w-1/3">Conventional Lossless Fabrics</th>
+                  <th className="p-6 text-emerald-400 font-mono text-xs uppercase tracking-wider bg-emerald-500/5 border-l border-emerald-500/20 w-1/3">Ultra Ethernet Direction (UEC)</th>
                 </tr>
               </thead>
               <tbody>
