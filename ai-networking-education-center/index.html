@@ -8,6 +8,15 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Runtime Tailwind fallback to prevent unstyled UI if build-time CSS processing regresses -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #0f1117;
+        color: #e2e8f0;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
