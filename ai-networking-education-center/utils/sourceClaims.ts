@@ -15,3 +15,9 @@ export const claimText = (value: string | SourceLinkedValue): string =>
 
 export const hasSourceMetadata = (value: string | SourceLinkedValue): value is SourceLinkedValue =>
   typeof value !== 'string';
+
+
+export const updateClaimText = (
+  value: string | SourceLinkedValue,
+  nextText: string
+): string | SourceLinkedValue => (typeof value === 'string' ? nextText : { ...value, value: nextText });

@@ -26,7 +26,10 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   private handleReset = () => {
-    localStorage.clear();
+    Object.keys(localStorage)
+      .filter((key) => key === 'app_version' || key.startsWith('app_'))
+      .forEach((key) => localStorage.removeItem(key));
+
     window.location.reload();
   };
 
