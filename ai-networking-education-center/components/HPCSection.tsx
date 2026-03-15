@@ -321,8 +321,8 @@ const HPCSection: React.FC = () => {
                 <li className="flex gap-4 items-start text-sm text-slate-300">
                   <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0"></div>
                   <span>
-                    <strong className="text-white">Network Functions:</strong> Needs RoCEv2, ECN,
-                    and SmartNICs.
+                    <strong className="text-white">Network Functions:</strong> Needs RoCEv2 and
+                    ECN; SmartNIC/DPU offload is optional depending on deployment.
                   </span>
                 </li>
               </ul>
