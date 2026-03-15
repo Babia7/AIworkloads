@@ -1,14 +1,16 @@
-import type { ComponentType } from 'react';
-import ArchitectureSection from '../components/ArchitectureSection';
-import ConceptsSection from '../components/ConceptsSection';
-import ProtocolsSection from '../components/ProtocolsSection';
-import ProtocolDeepDive from '../components/ProtocolDeepDive';
-import ComparisonTable from '../components/ComparisonTable';
-import PerformanceSection from '../components/PerformanceSection';
-import OperationsPlaybooksSection from '../components/OperationsPlaybooksSection';
-import HardwareSection from '../components/HardwareSection';
-import HPCSection from '../components/HPCSection';
-import GlossarySection from '../components/GlossarySection';
+import { lazy } from 'react';
+import type { ComponentType, LazyExoticComponent } from 'react';
+
+const ArchitectureSection = lazy(() => import('../components/ArchitectureSection'));
+const ConceptsSection = lazy(() => import('../components/ConceptsSection'));
+const ProtocolsSection = lazy(() => import('../components/ProtocolsSection'));
+const ProtocolDeepDive = lazy(() => import('../components/ProtocolDeepDive'));
+const ComparisonTable = lazy(() => import('../components/ComparisonTable'));
+const PerformanceSection = lazy(() => import('../components/PerformanceSection'));
+const OperationsPlaybooksSection = lazy(() => import('../components/OperationsPlaybooksSection'));
+const HardwareSection = lazy(() => import('../components/HardwareSection'));
+const HPCSection = lazy(() => import('../components/HPCSection'));
+const GlossarySection = lazy(() => import('../components/GlossarySection'));
 
 export interface ModuleRegistryItem {
   id: string;
@@ -16,7 +18,7 @@ export interface ModuleRegistryItem {
   title: string;
   order: number;
   tocVisible: boolean;
-  component: ComponentType;
+  component: ComponentType | LazyExoticComponent<ComponentType>;
 }
 
 export const MODULE_REGISTRY: ModuleRegistryItem[] = [
