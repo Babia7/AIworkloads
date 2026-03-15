@@ -37,6 +37,24 @@ The app has a strong and coherent educational narrative for practitioners learni
    - Some sections may oscillate between beginner and advanced depth without explicit “difficulty” labeling.
    - Add badges (Intro / Intermediate / Deep Dive) and expected prerequisite knowledge per section.
 
+
+## Accuracy Review (Current Draft)
+1. **Avoid inevitability language**
+   - Replace phrases like “the industry is moving from InfiniBand to UEC” with neutral wording such as “UEC is an emerging direction for AI Ethernet transport.”
+   - Rationale: InfiniBand remains widely deployed in production AI/HPC clusters; migration paths are workload- and operations-dependent.
+
+2. **Differentiate standards status vs implementation status**
+   - Use labels like “UEC-inspired capabilities” unless formally validated for a specific released specification/profile.
+   - Rationale: “Compliant” implies formal conformance testing and can overstate maturity if used broadly.
+
+3. **Keep comparison framing technology-neutral**
+   - Prefer “conventional lossless fabrics” vs naming a single legacy protocol as representative of all alternatives.
+   - Rationale: Avoids over-generalizing across diverse deployments and vendor stacks.
+
+4. **Explicitly mark design targets**
+   - Keep scale or performance claims in “design target / vendor claim” language when not independently benchmarked in-app.
+   - Rationale: Prevents readers from treating roadmap/spec values as field-validated outcomes.
+
 ## High-Impact Content Improvements (Prioritized)
 1. **Add operations runbooks (highest ROI)**
    - Include 3–5 troubleshooting runbooks:

@@ -21,7 +21,7 @@ const ProtocolsSection: React.FC = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Network Protocols Explained</h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
             Understanding the transport layer is critical for AI performance. 
-            Compare the current industry standard (<GlossaryTerm term="RoCE">RoCEv2</GlossaryTerm>) with the future of AI networking (UET).
+            Compare today's widely deployed Ethernet-based RDMA transport (<GlossaryTerm term="RoCE">RoCEv2</GlossaryTerm>) with the emerging Ultra Ethernet Transport (UET) direction from the UEC.
           </p>
         </div>
 
@@ -122,7 +122,7 @@ const ProtocolsSection: React.FC = () => {
                         role="img"
                         aria-label={protocol.id === 'roce' 
                             ? "Visual representation of RoCE traffic. Packets flow in a single ordered line from source to destination. A red 'PAUSE' indicator flashes, demonstrating Priority Flow Control blocking the path when congested."
-                            : "Visual representation of UET traffic. Green packets are sprayed across multiple paths simultaneously from source to destination, demonstrating high bandwidth utilization and out-of-order delivery."
+                            : "Conceptual visual of UET-style traffic engineering. Packets are sprayed across multiple paths from source to destination to improve utilization, with reordering at the destination."
                         }
                     >
                          {/* Abstract Flow Visual */}
