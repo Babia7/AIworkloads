@@ -9,5 +9,6 @@ export type {
   ProtocolMechanism, ProtocolConcept,
   HPCItem,
   FutureItem, FutureCategory,
+  RunbookTelemetryItem, OperationsRunbook,
 } from './content';
 export type { FeedbackItem } from './admin';

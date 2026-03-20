@@ -98,6 +98,28 @@ export interface HPCItem {
   points: Array<string | SourceLinkedValue>;
 }
 
+/** Single telemetry item in an operations runbook */
+export interface RunbookTelemetryItem {
+  text: string;
+  /** True = this is Arista EOS-specific CLI; mark clearly for vendor-neutral readers */
+  eosSpecific: boolean;
+}
+
+/** Troubleshooting runbook entry for the Operations Playbooks section */
+export interface OperationsRunbook {
+  id: string;
+  title: string;
+  severity: string;
+  /** One sentence describing the observable failure */
+  symptom: string;
+  /** 1–2 sentences explaining the mechanism driving the failure */
+  rootCause: string;
+  /** 3–5 specific counters or CLI commands to inspect */
+  inspect: RunbookTelemetryItem[];
+  /** Numbered corrective action steps */
+  actions: string[];
+}
+
 /** Individual roadmap improvement item */
 export interface FutureItem {
   title: string;

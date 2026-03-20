@@ -10,3 +10,4 @@ export { PRODUCTS } from './products';
 export { FUTURE_IMPROVEMENTS } from './future';
 
 export { HPC_CHECKLIST_DEFAULT } from './hpcChecklist';
+export { OPERATIONS_RUNBOOKS, OPERATIONS_PRINCIPLES, OPERATIONS_MIGRATION_ROWS, OPERATIONS_CHECKS } from './operations';
