@@ -26,9 +26,12 @@ jobs:
       - run: npm run build
       - run: npm run test
       - run: npx playwright install --with-deps chromium
-      - name: Run e2e tests (generate missing visual baselines)
-        run: npx playwright test --update-snapshots=missing
-      - name: Commit new linux visual baselines if generated
+      # Push to main: regenerate linux baselines and commit back (bootstraps first run,
+      # keeps baselines current so future PRs can diff against them)
+      - name: Update visual baselines
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx playwright test --update-snapshots
+      - name: Commit updated linux visual baselines
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         working-directory: .
         run: |
@@ -36,8 +39,12 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ai-networking-education-center/e2e/visual.spec.ts-snapshots/
           if git diff --staged --quiet; then
-            echo "No new baselines to commit"
+            echo "No baseline changes to commit"
           else
-            git commit -m "chore(e2e): auto-generate linux visual baselines [skip ci]"
+            git commit -m "chore(e2e): update linux visual baselines [skip ci]"
             git push
           fi
+      # PRs: compare against committed baselines for visual regression detection
+      - name: Run e2e tests
+        if: github.event_name == 'pull_request'
+        run: npm run test:e2e
