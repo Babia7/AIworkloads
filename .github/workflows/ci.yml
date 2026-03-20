@@ -5,6 +5,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -23,4 +26,18 @@ jobs:
       - run: npm run build
       - run: npm run test
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
+      - name: Run e2e tests (generate missing visual baselines)
+        run: npx playwright test --update-snapshots=missing
+      - name: Commit new linux visual baselines if generated
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ai-networking-education-center/e2e/visual.spec.ts-snapshots/
+          if git diff --staged --quiet; then
+            echo "No new baselines to commit"
+          else
+            git commit -m "chore(e2e): auto-generate linux visual baselines [skip ci]"
+            git push
+          fi
