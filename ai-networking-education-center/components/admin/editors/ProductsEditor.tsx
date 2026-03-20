@@ -1,6 +1,7 @@
 import React from 'react';
 import { ProductData } from '../../../types';
 import { claimText, updateClaimText } from '../../../utils/sourceClaims';
+import { arraySet } from '../../../utils/arrayMutate';
 
 export const ProductsEditor: React.FC<{ products: ProductData[]; onUpdate: (p: ProductData[]) => void }> = ({
   products = [],
@@ -21,11 +22,7 @@ export const ProductsEditor: React.FC<{ products: ProductData[]; onUpdate: (p: P
                 <label className="text-xs font-bold text-slate-500 uppercase">Series Name</label>
                 <input
                   value={product.series}
-                  onChange={(e) => {
-                    const next = [...products];
-                    next[idx].series = e.target.value;
-                    onUpdate(next);
-                  }}
+                  onChange={(e) => onUpdate(arraySet(products, idx, 'series', e.target.value))}
                   className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-white"
                 />
               </div>
@@ -33,11 +30,7 @@ export const ProductsEditor: React.FC<{ products: ProductData[]; onUpdate: (p: P
                 <label className="text-xs font-bold text-slate-500 uppercase">Role</label>
                 <input
                   value={product.role}
-                  onChange={(e) => {
-                    const next = [...products];
-                    next[idx].role = e.target.value;
-                    onUpdate(next);
-                  }}
+                  onChange={(e) => onUpdate(arraySet(products, idx, 'role', e.target.value))}
                   className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-white"
                 />
               </div>
@@ -46,11 +39,7 @@ export const ProductsEditor: React.FC<{ products: ProductData[]; onUpdate: (p: P
             <label className="text-xs font-bold text-slate-500 uppercase">Description</label>
             <textarea
               value={claimText(product.desc)}
-              onChange={(e) => {
-                const next = [...products];
-                next[idx].desc = updateClaimText(product.desc, e.target.value);
-                onUpdate(next);
-              }}
+              onChange={(e) => onUpdate(arraySet(products, idx, 'desc', updateClaimText(product.desc, e.target.value)))}
               className="w-full h-20 bg-[#161b22] border border-white/10 rounded p-3 text-sm text-slate-300 focus:border-blue-500 outline-none mb-6"
             />
 
@@ -58,11 +47,7 @@ export const ProductsEditor: React.FC<{ products: ProductData[]; onUpdate: (p: P
               <label className="text-xs font-bold text-slate-500 uppercase">Datasheet URL</label>
               <input
                 value={product.datasheetUrl || ''}
-                onChange={(e) => {
-                  const next = [...products];
-                  next[idx].datasheetUrl = e.target.value;
-                  onUpdate(next);
-                }}
+                onChange={(e) => onUpdate(arraySet(products, idx, 'datasheetUrl', e.target.value))}
                 placeholder="https://..."
                 className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-sm text-cyan-400 font-mono mt-1"
               />

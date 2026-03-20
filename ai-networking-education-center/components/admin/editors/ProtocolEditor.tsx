@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { ProtocolConcept } from '../../../types';
+import { arraySet } from '../../../utils/arrayMutate';
 
 export const ProtocolEditor: React.FC<{ protocols: ProtocolConcept[]; onUpdate: (p: ProtocolConcept[]) => void }> = ({ protocols = [], onUpdate }) => {
   return (
@@ -14,10 +15,10 @@ export const ProtocolEditor: React.FC<{ protocols: ProtocolConcept[]; onUpdate: 
         {protocols.map((proto, idx) => (
           <div key={idx} className="bg-[#0d1117] p-6 rounded-2xl border border-white/5">
             <div className="flex gap-4 mb-4">
-              <input value={proto.title} onChange={e => { const next = [...protocols]; next[idx].title = e.target.value; onUpdate(next); }} className="text-xl font-bold bg-transparent text-white border-b border-white/10 focus:border-blue-500 outline-none w-1/3" />
-              <input value={proto.subtitle} onChange={e => { const next = [...protocols]; next[idx].subtitle = e.target.value; onUpdate(next); }} className="text-sm font-medium bg-transparent text-slate-400 border-b border-white/10 focus:border-blue-500 outline-none w-1/4" />
+              <input value={proto.title} onChange={e => onUpdate(arraySet(protocols, idx, 'title', e.target.value))} className="text-xl font-bold bg-transparent text-white border-b border-white/10 focus:border-blue-500 outline-none w-1/3" />
+              <input value={proto.subtitle} onChange={e => onUpdate(arraySet(protocols, idx, 'subtitle', e.target.value))} className="text-sm font-medium bg-transparent text-slate-400 border-b border-white/10 focus:border-blue-500 outline-none w-1/4" />
             </div>
-            <textarea value={proto.description} onChange={e => { const next = [...protocols]; next[idx].description = e.target.value; onUpdate(next); }} className="w-full bg-[#161b22] border border-white/10 rounded p-3 text-sm text-slate-300 mb-6 h-20" />
+            <textarea value={proto.description} onChange={e => onUpdate(arraySet(protocols, idx, 'description', e.target.value))} className="w-full bg-[#161b22] border border-white/10 rounded p-3 text-sm text-slate-300 mb-6 h-20" />
 
             <div className="space-y-2">
               <div className="text-xs font-bold text-slate-500 uppercase">Mechanisms</div>

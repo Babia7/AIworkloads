@@ -2,6 +2,7 @@ import React from 'react';
 import { ICON_MAP } from '../../../constants';
 import { ConceptData } from '../../../types';
 import { claimText, updateClaimText } from '../../../utils/sourceClaims';
+import { arraySet } from '../../../utils/arrayMutate';
 
 export const ConceptsEditor: React.FC<{
   concepts: ConceptData[];
@@ -24,11 +25,7 @@ export const ConceptsEditor: React.FC<{
                 <label className="text-[10px] uppercase font-bold text-slate-500 mb-1 block">Icon</label>
                 <select
                   value={concept.iconKey}
-                  onChange={(e) => {
-                    const next = [...concepts];
-                    next[idx].iconKey = e.target.value;
-                    onUpdate(next);
-                  }}
+                  onChange={(e) => onUpdate(arraySet(concepts, idx, 'iconKey', e.target.value))}
                   className="w-full bg-[#161b22] text-xs text-white border border-white/10 rounded py-2 px-2"
                 >
                   {availableIcons.map((ic) => (
@@ -42,11 +39,7 @@ export const ConceptsEditor: React.FC<{
                 <label className="text-[10px] uppercase font-bold text-slate-500 mb-1 block">Title</label>
                 <input
                   value={concept.title}
-                  onChange={(e) => {
-                    const next = [...concepts];
-                    next[idx].title = e.target.value;
-                    onUpdate(next);
-                  }}
+                  onChange={(e) => onUpdate(arraySet(concepts, idx, 'title', e.target.value))}
                   className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-white font-bold"
                 />
               </div>
@@ -56,11 +49,7 @@ export const ConceptsEditor: React.FC<{
                 </label>
                 <input
                   value={concept.fullName}
-                  onChange={(e) => {
-                    const next = [...concepts];
-                    next[idx].fullName = e.target.value;
-                    onUpdate(next);
-                  }}
+                  onChange={(e) => onUpdate(arraySet(concepts, idx, 'fullName', e.target.value))}
                   className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-slate-400"
                 />
               </div>
@@ -69,11 +58,7 @@ export const ConceptsEditor: React.FC<{
             <label className="text-[10px] uppercase font-bold text-slate-500 mb-1 block">Description</label>
             <textarea
               value={claimText(concept.description)}
-              onChange={(e) => {
-                const next = [...concepts];
-                next[idx].description = updateClaimText(concept.description, e.target.value);
-                onUpdate(next);
-              }}
+              onChange={(e) => onUpdate(arraySet(concepts, idx, 'description', updateClaimText(concept.description, e.target.value)))}
               className="w-full bg-[#161b22] border border-white/10 rounded p-3 text-sm text-slate-300 h-24 mb-4"
             />
 

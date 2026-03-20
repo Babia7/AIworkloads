@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { FutureCategory } from '../../../types';
+import { arraySetNested } from '../../../utils/arrayMutate';
 
 export const FutureEditor: React.FC<{ data: FutureCategory[]; onUpdate: (d: FutureCategory[]) => void }> = ({ data = [], onUpdate }) => {
   return (
@@ -20,12 +21,12 @@ export const FutureEditor: React.FC<{ data: FutureCategory[]; onUpdate: (d: Futu
                   <div className="flex-1 space-y-1">
                     <input
                       value={item.title}
-                      onChange={e => { const newData = [...data]; newData[catIdx].items[itemIdx].title = e.target.value; onUpdate(newData); }}
+                      onChange={e => onUpdate(arraySetNested(data, catIdx, 'items', itemIdx, 'title', e.target.value))}
                       className="w-full bg-transparent border-none text-sm font-bold text-white focus:ring-0 px-0"
                     />
                     <input
                       value={item.desc}
-                      onChange={e => { const newData = [...data]; newData[catIdx].items[itemIdx].desc = e.target.value; onUpdate(newData); }}
+                      onChange={e => onUpdate(arraySetNested(data, catIdx, 'items', itemIdx, 'desc', e.target.value))}
                       className="w-full bg-transparent border-none text-xs text-slate-500 focus:ring-0 px-0"
                     />
                   </div>

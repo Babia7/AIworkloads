@@ -10,7 +10,9 @@
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write \"**/*.{ts,tsx,json,css}\"",
     "check:claim-sources": "node scripts/validate-claim-sources.mjs",
-    "check:claim-ids": "node scripts/validate-claim-ids.mjs"
+    "check:claim-ids": "node scripts/validate-claim-ids.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "framer-motion": "^11.0.0",
@@ -20,7 +22,11 @@
     "recharts": "^3.5.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^16.0.0",
     "@tailwindcss/postcss": "^4.2.1",
+    "jsdom": "^24.0.0",
+    "vitest": "^2.0.0",
     "@types/node": "^22.14.0",
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",

@@ -1,4 +1,5 @@
 import { useEffect, useReducer, type Reducer } from 'react';
+import { safeSetItem } from '../utils/safeStorage';
 
 interface PersistedReducerOptions {
   version: string;
@@ -52,7 +53,7 @@ export const usePersistedReducer = <TState, TAction>(
   );
 
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state));
+    safeSetItem(key, JSON.stringify(state));
   }, [key, state]);
 
   return [state, dispatch] as const;

@@ -2,6 +2,7 @@ import React from 'react';
 import { ICON_MAP } from '../../../constants';
 import { HPCItem } from '../../../types';
 import { claimText, updateClaimText } from '../../../utils/sourceClaims';
+import { arraySet } from '../../../utils/arrayMutate';
 
 export const HPCEditor: React.FC<{ checklist: HPCItem[]; onUpdate: (c: HPCItem[]) => void }> = ({
   checklist = [],
@@ -22,11 +23,7 @@ export const HPCEditor: React.FC<{ checklist: HPCItem[]; onUpdate: (c: HPCItem[]
             <div className="flex gap-3 mb-4">
               <select
                 value={item.iconKey}
-                onChange={(e) => {
-                  const next = [...checklist];
-                  next[idx].iconKey = e.target.value;
-                  onUpdate(next);
-                }}
+                onChange={(e) => onUpdate(arraySet(checklist, idx, 'iconKey', e.target.value))}
                 className="bg-[#161b22] border border-white/10 rounded px-3 py-2 text-xs text-white"
               >
                 {availableIcons.map((ic) => (
@@ -38,11 +35,7 @@ export const HPCEditor: React.FC<{ checklist: HPCItem[]; onUpdate: (c: HPCItem[]
 
               <input
                 value={item.title}
-                onChange={(e) => {
-                  const next = [...checklist];
-                  next[idx].title = e.target.value;
-                  onUpdate(next);
-                }}
+                onChange={(e) => onUpdate(arraySet(checklist, idx, 'title', e.target.value))}
                 className="flex-1 font-bold bg-transparent text-white border-b border-white/10 focus:border-blue-500 outline-none"
               />
             </div>

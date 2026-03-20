@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChartData } from '../../../types';
 import { claimText, updateClaimText } from '../../../utils/sourceClaims';
+import { arraySet } from '../../../utils/arrayMutate';
 
 interface PerformanceEditorProps {
   perfData: ChartData[];
@@ -32,11 +33,7 @@ export const PerformanceEditor: React.FC<PerformanceEditorProps> = ({
                   <label className="text-xs text-slate-500 uppercase">Label</label>
                   <input
                     value={claimText(item.name ?? '')}
-                    onChange={(e) => {
-                      const next = [...perfData];
-                      next[i].name = updateClaimText(item.name ?? '', e.target.value);
-                      onUpdatePerf(next);
-                    }}
+                    onChange={(e) => onUpdatePerf(arraySet(perfData, i, 'name', updateClaimText(item.name ?? '', e.target.value)))}
                     className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-sm text-white"
                   />
                 </div>
@@ -45,11 +42,7 @@ export const PerformanceEditor: React.FC<PerformanceEditorProps> = ({
                   <input
                     type="number"
                     value={item.efficiency}
-                    onChange={(e) => {
-                      const next = [...perfData];
-                      next[i].efficiency = Number(e.target.value);
-                      onUpdatePerf(next);
-                    }}
+                    onChange={(e) => onUpdatePerf(arraySet(perfData, i, 'efficiency', Number(e.target.value)))}
                     className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-sm text-white"
                   />
                 </div>
@@ -67,11 +60,7 @@ export const PerformanceEditor: React.FC<PerformanceEditorProps> = ({
                   <label className="text-xs text-slate-500 uppercase">Label</label>
                   <input
                     value={claimText(item.name ?? '')}
-                    onChange={(e) => {
-                      const next = [...failData];
-                      next[i].name = updateClaimText(item.name ?? '', e.target.value);
-                      onUpdateFail(next);
-                    }}
+                    onChange={(e) => onUpdateFail(arraySet(failData, i, 'name', updateClaimText(item.name ?? '', e.target.value)))}
                     className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-sm text-white"
                   />
                 </div>
@@ -80,11 +69,7 @@ export const PerformanceEditor: React.FC<PerformanceEditorProps> = ({
                   <input
                     type="number"
                     value={item.delay}
-                    onChange={(e) => {
-                      const next = [...failData];
-                      next[i].delay = Number(e.target.value);
-                      onUpdateFail(next);
-                    }}
+                    onChange={(e) => onUpdateFail(arraySet(failData, i, 'delay', Number(e.target.value)))}
                     className="w-full bg-[#161b22] border border-white/10 rounded p-2 text-sm text-white"
                   />
                 </div>

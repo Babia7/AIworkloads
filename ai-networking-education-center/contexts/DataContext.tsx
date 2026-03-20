@@ -26,6 +26,8 @@ import {
   HPCItem,
 } from '../types';
 import { usePersistedReducer } from '../hooks/usePersistedReducer';
+import { safeSetItem, safeSetItemImmediate } from '../utils/safeStorage';
+import { loadState } from '../utils/loadState';
 
 /**
  * DataContext Architecture
@@ -194,62 +196,23 @@ const comparisonReducer = (state: ComparisonState, action: ComparisonAction): Co
   }
 };
 
-/**
- * Helper: Safely load state with Versioning and Type Checking.
- *
- * Checks 'app_version' in localStorage. If it doesn't match the current code version,
- * it ignores the stored data and returns the default fallback.
- * This prevents white-screen crashes when we update the data schema.
- */
-const loadState = <T,>(key: string, fallback: T): T => {
-  try {
-    const version = localStorage.getItem('app_version');
-    if (version !== APP_SCHEMA_VERSION) {
-      // Bumped version for new schema
-      return fallback;
-    }
-    const saved = localStorage.getItem(key);
-    if (!saved) return fallback;
-
-    const parsed = JSON.parse(saved);
-
-    // Critical Safety Check: JSON.parse("null") returns null, which crashes map() functions
-    if (parsed === null || parsed === undefined) return fallback;
-
-    // Type Safety: If fallback is array, ensure parsed is array
-    if (Array.isArray(fallback) && !Array.isArray(parsed)) return fallback;
-
-    // Type Safety: If fallback is object (not array), ensure parsed is object
-    if (
-      typeof fallback === 'object' &&
-      !Array.isArray(fallback) &&
-      (typeof parsed !== 'object' || Array.isArray(parsed))
-    )
-      return fallback;
-
-    return parsed;
-  } catch (e) {
-    console.warn(`Failed to load ${key}, using fallback.`, e);
-    return fallback;
-  }
-};
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Initialize state using the safe loader
   const [glossary, setGlossary] = useState<Record<string, string>>(() =>
-    loadState('app_glossary', GLOSSARY)
+    loadState('app_glossary', GLOSSARY, APP_SCHEMA_VERSION)
   );
   const [products, setProducts] = useState<ProductData[]>(() =>
-    loadState('app_products', PRODUCTS)
+    loadState('app_products', PRODUCTS, APP_SCHEMA_VERSION)
   );
   const [futureImprovements, setFutureImprovements] = useState<typeof FUTURE_IMPROVEMENTS>(() =>
-    loadState('app_future', FUTURE_IMPROVEMENTS)
+    loadState('app_future', FUTURE_IMPROVEMENTS, APP_SCHEMA_VERSION)
   );
   const [appConfig, setAppConfig] = useState<AppConfig>(() =>
-    loadState('app_config', DEFAULT_APP_CONFIG)
+    loadState('app_config', DEFAULT_APP_CONFIG, APP_SCHEMA_VERSION)
   );
   const [homeModules, setHomeModules] = useState<HomeModule[]>(() =>
-    loadState('app_home_modules', DEFAULT_HOME_MODULES)
+    loadState('app_home_modules', DEFAULT_HOME_MODULES, APP_SCHEMA_VERSION)
   );
   const [performanceState, dispatchPerformance] = usePersistedReducer<
     PerformanceState,
@@ -279,7 +242,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
   const { hpcChecklist } = hpcState;
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>(() =>
-    loadState('app_feedback', [])
+    loadState('app_feedback', [], APP_SCHEMA_VERSION)
   );
 
   // New State for Architecture, Concepts, Comparison
@@ -313,27 +276,27 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Persistence Effects: Save to LocalStorage on every change
   useEffect(() => {
-    localStorage.setItem('app_glossary', JSON.stringify(glossary));
+    safeSetItem('app_glossary', JSON.stringify(glossary));
   }, [glossary]);
   useEffect(() => {
-    localStorage.setItem('app_products', JSON.stringify(products));
+    safeSetItem('app_products', JSON.stringify(products));
   }, [products]);
   useEffect(() => {
-    localStorage.setItem('app_future', JSON.stringify(futureImprovements));
+    safeSetItem('app_future', JSON.stringify(futureImprovements));
   }, [futureImprovements]);
   useEffect(() => {
-    localStorage.setItem('app_config', JSON.stringify(appConfig));
+    safeSetItem('app_config', JSON.stringify(appConfig));
   }, [appConfig]);
   useEffect(() => {
-    localStorage.setItem('app_home_modules', JSON.stringify(homeModules));
+    safeSetItem('app_home_modules', JSON.stringify(homeModules));
   }, [homeModules]);
   useEffect(() => {
-    localStorage.setItem('app_feedback', JSON.stringify(feedbackList));
+    safeSetItem('app_feedback', JSON.stringify(feedbackList));
   }, [feedbackList]);
 
   // Set version on mount to confirm successful load for next visit
   useEffect(() => {
-    localStorage.setItem('app_version', APP_SCHEMA_VERSION);
+    safeSetItemImmediate('app_version', APP_SCHEMA_VERSION);
   }, []);
 
   // Update Actions
@@ -388,7 +351,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       )
     ) {
       localStorage.clear();
-      localStorage.setItem('app_version', APP_SCHEMA_VERSION);
+      safeSetItemImmediate('app_version', APP_SCHEMA_VERSION);
       window.location.reload();
     }
   };
