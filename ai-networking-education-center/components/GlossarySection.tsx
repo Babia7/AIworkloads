@@ -3,9 +3,13 @@ import React, { useState } from 'react';
 import { useData } from '../contexts/DataContext';
 import { Search, BookOpen } from 'lucide-react';
 
-const GlossarySection: React.FC = () => {
+interface Props {
+  initialSearch?: string;
+}
+
+const GlossarySection: React.FC<Props> = ({ initialSearch = '' }) => {
   const { glossary } = useData();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
 
   // Sort terms alphabetically
   const sortedTerms = Object.keys(glossary).sort();

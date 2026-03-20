@@ -20,7 +20,7 @@ export interface ModuleRegistryItem {
   title: string;
   order: number;
   tocVisible: boolean;
-  page: 'main' | 'operations';
+  page: 'main' | 'operations' | 'glossary' | 'deep-dive';
   component: ComponentType | LazyExoticComponent<ComponentType>;
 }
 
@@ -58,7 +58,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     title: 'Deep Dive',
     order: 4,
     tocVisible: true,
-    page: 'main',
+    page: 'deep-dive',
     component: ProtocolDeepDive,
   },
   {
@@ -130,7 +130,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     title: 'Glossary',
     order: 12,
     tocVisible: true,
-    page: 'main',
+    page: 'glossary',
     component: GlossarySection,
   },
 ];

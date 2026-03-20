@@ -7,14 +7,14 @@ import { useSearchPalette } from '../hooks/useSearchPalette';
 import { MODULE_REGISTRY } from '../app/moduleRegistry';
 
 /**
- * OperationsPage
+ * DeepDivePage
  *
- * Standalone page rendered at "/operations".
- * Renders only the OperationsPlaybooksSection — no HomeDashboard, no TOC.
+ * Standalone page rendered at "/deep-dive".
+ * Renders only the ProtocolDeepDive section — no HomeDashboard, no TOC.
  */
-const OperationsPage: React.FC = () => {
+const DeepDivePage: React.FC = () => {
   const palette = useSearchPalette();
-  const opsModule = MODULE_REGISTRY.find(m => m.id === 'operations');
+  const deepDiveModule = MODULE_REGISTRY.find(m => m.id === 'deep-dive');
 
   return (
     <div className="min-h-screen bg-[#0F1117] text-slate-100 selection:bg-blue-500/30 pb-32">
@@ -22,12 +22,12 @@ const OperationsPage: React.FC = () => {
       <SearchPalette palette={palette} />
 
       <main>
-        {opsModule && (
+        {deepDiveModule && (
           <FadeIn>
             <Suspense
               fallback={<div className="container mx-auto px-6 py-10 text-sm text-slate-500">Loading section...</div>}
             >
-              <opsModule.component />
+              <deepDiveModule.component />
             </Suspense>
           </FadeIn>
         )}
@@ -38,4 +38,4 @@ const OperationsPage: React.FC = () => {
   );
 };
 
-export default OperationsPage;
+export default DeepDivePage;

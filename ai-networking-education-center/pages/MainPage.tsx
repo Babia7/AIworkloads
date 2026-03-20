@@ -1,10 +1,12 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import HomeDashboard from '../components/HomeDashboard';
 import TableOfContents from '../components/TableOfContents';
 import Footer from '../components/Footer';
 import FadeIn from '../components/FadeIn';
 import AdminDashboard from '../components/AdminDashboard';
+import SearchPalette from '../components/SearchPalette';
+import { useSearchPalette } from '../hooks/useSearchPalette';
 import { MODULE_REGISTRY } from '../app/moduleRegistry';
 
 /**
@@ -15,13 +17,29 @@ import { MODULE_REGISTRY } from '../app/moduleRegistry';
  */
 const MainPage: React.FC = () => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const palette = useSearchPalette();
   const mainModules = MODULE_REGISTRY.filter(m => m.page === 'main');
+
+  // Scroll to hash anchor on load, retrying after lazy chunks mount
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const id = hash.slice(1);
+    const attempt = () => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
+    attempt();
+    const t = setTimeout(attempt, 600);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0F1117] text-slate-100 selection:bg-blue-500/30 pb-32">
       {/* Global Navigation Elements */}
-      <Navigation />
+      <Navigation onSearchClick={palette.open} />
       <TableOfContents />
+      <SearchPalette palette={palette} />
 
       <main>
         {/* Interactive Bento-Grid Dashboard */}

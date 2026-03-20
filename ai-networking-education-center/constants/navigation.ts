@@ -14,11 +14,11 @@ export const NAVIGATION: NavItem[] = [
   { id: 'etherlink', label: 'Architecture', icon: Layout },
   { id: 'concepts', label: 'Concepts', icon: Lightbulb },
   { id: 'protocols', label: 'Protocols', icon: Network },
-  { id: 'deep-dive', label: 'Deep Dive', icon: Microscope },
+  { id: 'deep-dive', label: 'Deep Dive', icon: Microscope, href: '/deep-dive' },
   { id: 'uec', label: 'Comparison', icon: GitCompare },
   { id: 'performance', label: 'Performance', icon: BarChart2 },
   { id: 'operations', label: 'Ops Playbooks', icon: ClipboardList, href: '/operations' },
   { id: 'hardware', label: 'Platforms', icon: HardDrive },
   { id: 'hpc', label: 'AI vs HPC', icon: Grid },
-  { id: 'glossary', label: 'Glossary', icon: BookOpen },
+  { id: 'glossary', label: 'Glossary', icon: BookOpen, href: '/glossary' },
 ];

@@ -21,3 +21,6 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+
+# Playwright generated output
+test-results/
