@@ -8,7 +8,7 @@ const TARGET_FILES = [
   'constants/products.ts',
 ];
 
-const NUMERIC_LITERAL = /(['"`])([^\1\n]*\d[^\1\n]*(?:%|ms|x|Tbps|k)[^\1\n]*)\1/g;
+const NUMERIC_LITERAL = /"[^"\n]*\d[^"\n]*(?:%|ms|x|Tbps|k)[^"\n]*"|'[^'\n]*\d[^'\n]*(?:%|ms|x|Tbps|k)[^'\n]*'|`[^`\n]*\d[^`\n]*(?:%|ms|x|Tbps|k)[^`\n]*`/g;
 const CLAIM_BACKED_HINT =
   /(claimTextById\(|getPerformanceClaim\(|claim\([^\n]*,[^\n]*,[^\n]*['"][a-zA-Z0-9]+['"])/;
 
