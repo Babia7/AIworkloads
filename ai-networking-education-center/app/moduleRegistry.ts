@@ -18,6 +18,8 @@ export interface ModuleRegistryItem {
   id: string;
   anchorId: string;
   title: string;
+  /** One-line preview shown in "Next section" CTA */
+  subtitle?: string;
   order: number;
   tocVisible: boolean;
   page: 'main' | 'operations' | 'glossary' | 'deep-dive';
@@ -29,6 +31,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'architecture',
     anchorId: 'etherlink',
     title: 'Architecture',
+    subtitle: 'How AI fabrics differ from legacy three-tier networks',
     order: 1,
     tocVisible: true,
     page: 'main',
@@ -38,6 +41,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'concepts',
     anchorId: 'concepts',
     title: 'Concepts',
+    subtitle: 'RDMA, NVMe-oF, RoCEv2 — the foundations of AI networking',
     order: 2,
     tocVisible: true,
     page: 'main',
@@ -47,6 +51,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'protocols',
     anchorId: 'protocols',
     title: 'Protocols',
+    subtitle: 'PFC, ECN, DCQCN and the RoCEv2 congestion control stack',
     order: 3,
     tocVisible: true,
     page: 'main',
@@ -65,6 +70,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'load-balancing',
     anchorId: 'load-balancing',
     title: 'Load Balancing',
+    subtitle: 'ECMP, DLB, CLB and packet spraying compared',
     order: 5,
     tocVisible: true,
     page: 'main',
@@ -74,6 +80,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'comparison',
     anchorId: 'uec',
     title: 'Comparison',
+    subtitle: 'RoCEv2 vs InfiniBand vs UET — technology tradeoffs',
     order: 6,
     tocVisible: true,
     page: 'main',
@@ -83,6 +90,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'performance',
     anchorId: 'performance',
     title: 'Performance',
+    subtitle: 'Latency, throughput, and collective communication benchmarks',
     order: 7,
     tocVisible: true,
     page: 'main',
@@ -101,6 +109,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'hardware',
     anchorId: 'hardware',
     title: 'Platforms',
+    subtitle: 'Arista switch platforms and silicon for AI fabrics',
     order: 9,
     tocVisible: true,
     page: 'main',
@@ -110,6 +119,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'training-vs-inference',
     anchorId: 'training-vs-inference',
     title: 'Training vs Inference',
+    subtitle: 'Traffic patterns, latency targets, and design tradeoffs',
     order: 10,
     tocVisible: true,
     page: 'main',
@@ -119,6 +129,7 @@ export const MODULE_REGISTRY: ModuleRegistryItem[] = [
     id: 'hpc',
     anchorId: 'hpc',
     title: 'AI vs HPC',
+    subtitle: 'How AI training differs from traditional HPC networking',
     order: 11,
     tocVisible: true,
     page: 'main',

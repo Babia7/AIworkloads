@@ -1,6 +1,6 @@
 export { ICON_MAP } from './icons';
 export { NAVIGATION } from './navigation';
-export { GLOSSARY } from './glossary';
+export { GLOSSARY, GLOSSARY_TERM_DOMAINS } from './glossary';
 export { DEFAULT_APP_CONFIG, DEFAULT_HOME_MODULES } from './modules';
 export { SCALING_CONCEPTS, CORE_CONCEPTS, TOPOLOGY_SELECTION } from './concepts';
 export { PROTOCOL_CONCEPTS, CONGESTION_PROCEDURE } from './protocols';

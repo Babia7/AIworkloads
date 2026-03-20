@@ -1,5 +1,5 @@
-import React from 'react';
-import { AlertTriangle, BookCheck, ClipboardList, Gauge, Network, Terminal, Workflow } from 'lucide-react';
+import React, { useState } from 'react';
+import { AlertTriangle, BookCheck, Check, ChevronDown, ChevronRight, ClipboardList, Copy, Gauge, Network, Terminal, Workflow } from 'lucide-react';
 import {
   OPERATIONS_RUNBOOKS,
   OPERATIONS_PRINCIPLES,
@@ -13,7 +13,48 @@ const SEVERITY_STYLES: Record<string, string> = {
   'Medium Priority': 'bg-yellow-500/10 text-yellow-300 border-yellow-500/20',
 };
 
+const SEVERITY_FILTER_STYLES: Record<string, string> = {
+  All: 'bg-slate-700 text-slate-200',
+  Critical: 'bg-red-500/20 text-red-300 border-red-500/30',
+  'High Priority': 'bg-orange-500/20 text-orange-300 border-orange-500/30',
+  'Medium Priority': 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+};
+
+/** Extract the CLI command text before the " — " description separator. */
+const extractCommand = (text: string): string => {
+  const sep = text.indexOf(' — ');
+  return sep >= 0 ? text.slice(0, sep) : text;
+};
+
 const OperationsPlaybooksSection: React.FC = () => {
+  const [severityFilter, setSeverityFilter] = useState<string>('All');
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const toggleExpanded = (id: string) => {
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const handleCopy = (command: string, key: string) => {
+    navigator.clipboard.writeText(command).catch(() => {});
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 1500);
+  };
+
+  const filteredRunbooks = OPERATIONS_RUNBOOKS.filter(
+    b => severityFilter === 'All' || b.severity === severityFilter,
+  );
+
+  const severityOrder: Record<string, number> = { Critical: 0, 'High Priority': 1, 'Medium Priority': 2 };
+  const sortedRunbooks = [...filteredRunbooks].sort(
+    (a, b) => (severityOrder[a.severity] ?? 3) - (severityOrder[b.severity] ?? 3),
+  );
+
   return (
     <section id="operations" className="py-32 bg-[#0F1117] border-t border-white/5">
       <div className="container mx-auto px-6">
@@ -45,73 +86,131 @@ const OperationsPlaybooksSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Runbooks */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-10">
-          {OPERATIONS_RUNBOOKS.map((book) => (
-            <article key={book.id} className="bg-[#161b22] border border-white/5 rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-white font-semibold text-lg">{book.title}</h3>
-                <span
-                  className={`text-[10px] font-mono uppercase px-2 py-1 rounded-full border ${
-                    SEVERITY_STYLES[book.severity] ?? 'bg-slate-500/10 text-slate-300 border-slate-500/20'
-                  }`}
-                >
-                  {book.severity}
-                </span>
-              </div>
-
-              <div className="space-y-4 text-sm">
-                <p className="text-slate-300">
-                  <span className="text-amber-300 font-semibold inline-flex items-center gap-1">
-                    <AlertTriangle size={12} /> Symptom:
-                  </span>{' '}
-                  {book.symptom}
-                </p>
-
-                <p className="text-slate-400">
-                  <span className="text-purple-300 font-semibold">Root Cause: </span>
-                  {book.rootCause}
-                </p>
-
-                <div>
-                  <p className="text-blue-300 font-semibold inline-flex items-center gap-1 mb-2">
-                    <Gauge size={12} /> Telemetry to Inspect:
-                  </p>
-                  <ul className="space-y-1.5">
-                    {book.inspect.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-slate-400">
-                        {item.eosSpecific ? (
-                          <span
-                            className="mt-0.5 inline-flex items-center gap-1 shrink-0 text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20"
-                            title="Arista EOS-specific CLI"
-                          >
-                            <Terminal size={8} /> EOS
-                          </span>
-                        ) : (
-                          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" />
-                        )}
-                        <span>{item.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <p className="text-emerald-300 font-semibold inline-flex items-center gap-1 mb-2">
-                    <Workflow size={12} /> Corrective Actions:
-                  </p>
-                  <ol className="space-y-1.5 text-slate-400 list-none">
-                    {book.actions.map((action, i) => (
-                      <li key={i} className="flex gap-2">
-                        <span className="shrink-0 text-emerald-500 font-mono text-xs mt-0.5">{i + 1}.</span>
-                        <span>{action}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </div>
-            </article>
+        {/* Severity Filter Bar */}
+        <div className="flex flex-wrap items-center gap-2 mb-6">
+          <span className="text-xs font-mono text-slate-500 uppercase tracking-wider mr-1">Filter:</span>
+          {(['All', 'Critical', 'High Priority', 'Medium Priority'] as const).map((sev) => (
+            <button
+              key={sev}
+              onClick={() => setSeverityFilter(sev)}
+              className={`px-3 py-1 rounded-full text-xs font-mono border transition-all ${
+                severityFilter === sev
+                  ? `${SEVERITY_FILTER_STYLES[sev]} border-current`
+                  : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20 hover:text-slate-200'
+              }`}
+            >
+              {sev}
+            </button>
           ))}
+          <span className="ml-auto text-xs text-slate-500 font-mono">{sortedRunbooks.length} runbook{sortedRunbooks.length !== 1 ? 's' : ''}</span>
+        </div>
+
+        {/* Runbooks — collapsed quick-reference cards, expand on click */}
+        <div className="space-y-4 mb-10">
+          {sortedRunbooks.map((book) => {
+            const isExpanded = expandedIds.has(book.id);
+            return (
+              <article key={book.id} className="bg-[#161b22] border border-white/5 rounded-2xl overflow-hidden">
+                {/* Quick-reference header — always visible */}
+                <button
+                  onClick={() => toggleExpanded(book.id)}
+                  className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left hover:bg-white/3 transition-colors"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span
+                      className={`shrink-0 text-[10px] font-mono uppercase px-2 py-1 rounded-full border ${
+                        SEVERITY_STYLES[book.severity] ?? 'bg-slate-500/10 text-slate-300 border-slate-500/20'
+                      }`}
+                    >
+                      {book.severity}
+                    </span>
+                    <h3 className="text-white font-semibold text-sm truncate">{book.title}</h3>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="hidden sm:block text-xs text-slate-500 max-w-[240px] truncate">
+                      {book.symptom.slice(0, 80)}{book.symptom.length > 80 ? '…' : ''}
+                    </span>
+                    {isExpanded
+                      ? <ChevronDown size={16} className="text-slate-500" />
+                      : <ChevronRight size={16} className="text-slate-500" />
+                    }
+                  </div>
+                </button>
+
+                {/* Expanded detail */}
+                {isExpanded && (
+                  <div className="px-6 pb-6 pt-2 border-t border-white/5 space-y-4 text-sm">
+                    <p className="text-slate-300">
+                      <span className="text-amber-300 font-semibold inline-flex items-center gap-1">
+                        <AlertTriangle size={12} /> Symptom:
+                      </span>{' '}
+                      {book.symptom}
+                    </p>
+
+                    <p className="text-slate-400">
+                      <span className="text-purple-300 font-semibold">Root Cause: </span>
+                      {book.rootCause}
+                    </p>
+
+                    <div>
+                      <p className="text-blue-300 font-semibold inline-flex items-center gap-1 mb-2">
+                        <Gauge size={12} /> Telemetry to Inspect:
+                      </p>
+                      <ul className="space-y-2">
+                        {book.inspect.map((item, i) => {
+                          const copyKey = `${book.id}-${i}`;
+                          const command = extractCommand(item.text);
+                          const isCopied = copiedKey === copyKey;
+                          return (
+                            <li key={i} className="flex items-start gap-2 text-slate-400">
+                              {item.eosSpecific ? (
+                                <div className="flex items-center gap-1.5 shrink-0 mt-0.5">
+                                  <span
+                                    className="inline-flex items-center gap-1 text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20"
+                                    title="Arista EOS-specific CLI"
+                                  >
+                                    <Terminal size={8} /> EOS
+                                  </span>
+                                  <button
+                                    onClick={() => handleCopy(command, copyKey)}
+                                    title="Copy command"
+                                    className={`inline-flex items-center gap-1 text-[9px] font-mono px-1.5 py-0.5 rounded border transition-all ${
+                                      isCopied
+                                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                        : 'bg-white/5 text-slate-500 border-white/10 hover:text-slate-300 hover:border-white/20'
+                                    }`}
+                                  >
+                                    {isCopied ? <><Check size={8} /> Copied!</> : <><Copy size={8} /> Copy</>}
+                                  </button>
+                                </div>
+                              ) : (
+                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" />
+                              )}
+                              <span>{item.text}</span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+
+                    <div>
+                      <p className="text-emerald-300 font-semibold inline-flex items-center gap-1 mb-2">
+                        <Workflow size={12} /> Corrective Actions:
+                      </p>
+                      <ol className="space-y-1.5 text-slate-400 list-none">
+                        {book.actions.map((action, i) => (
+                          <li key={i} className="flex gap-2">
+                            <span className="shrink-0 text-emerald-500 font-mono text-xs mt-0.5">{i + 1}.</span>
+                            <span>{action}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
 
         {/* Migration Decision Matrix */}

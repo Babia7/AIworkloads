@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 import FadeIn from '../components/FadeIn';
 import AdminDashboard from '../components/AdminDashboard';
 import SearchPalette from '../components/SearchPalette';
+import NextSectionCTA from '../components/NextSectionCTA';
+import StickyModuleHeader from '../components/StickyModuleHeader';
 import { useSearchPalette } from '../hooks/useSearchPalette';
 import { MODULE_REGISTRY } from '../app/moduleRegistry';
 
@@ -40,6 +42,7 @@ const MainPage: React.FC = () => {
       <Navigation onSearchClick={palette.open} />
       <TableOfContents />
       <SearchPalette palette={palette} />
+      <StickyModuleHeader />
 
       <main>
         {/* Interactive Bento-Grid Dashboard */}
@@ -47,13 +50,16 @@ const MainPage: React.FC = () => {
 
         {/* Educational Modules (Scrollable) */}
         {mainModules.map(({ id, component: SectionComponent }) => (
-          <FadeIn key={id}>
-            <Suspense
-              fallback={<div className="container mx-auto px-6 py-10 text-sm text-slate-500">Loading section...</div>}
-            >
-              <SectionComponent />
-            </Suspense>
-          </FadeIn>
+          <React.Fragment key={id}>
+            <FadeIn>
+              <Suspense
+                fallback={<div className="container mx-auto px-6 py-10 text-sm text-slate-500">Loading section...</div>}
+              >
+                <SectionComponent />
+              </Suspense>
+            </FadeIn>
+            <NextSectionCTA currentId={id} />
+          </React.Fragment>
         ))}
       </main>
 
