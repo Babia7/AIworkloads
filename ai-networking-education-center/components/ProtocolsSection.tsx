@@ -6,6 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ICON_MAP } from '../constants';
 import { Network } from 'lucide-react';
 
+const protocolColor = (color: string) => {
+  if (color === 'blue') return { tab: 'bg-blue-600', badge: 'bg-blue-900/30 text-blue-400', icon: 'bg-blue-500/10 text-blue-400' };
+  if (color === 'purple') return { tab: 'bg-purple-600', badge: 'bg-purple-900/30 text-purple-400', icon: 'bg-purple-500/10 text-purple-400' };
+  return { tab: 'bg-green-600', badge: 'bg-green-900/30 text-green-400', icon: 'bg-green-500/10 text-green-400' };
+};
+
 const ProtocolsSection: React.FC = () => {
   const { protocolConcepts } = useData();
   const [activeTab, setActiveTab] = useState('roce');
@@ -43,7 +49,7 @@ const ProtocolsSection: React.FC = () => {
                 {activeTab === protocol.id && (
                   <motion.div
                     layoutId="protocol-tab-bg"
-                    className={`absolute inset-0 rounded-full ${protocol.color === 'blue' ? 'bg-blue-600' : 'bg-green-600'} shadow-lg`}
+                    className={`absolute inset-0 rounded-full ${protocolColor(protocol.color).tab} shadow-lg`}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
@@ -72,13 +78,11 @@ const ProtocolsSection: React.FC = () => {
                 >
                     {/* Left: Description */}
                     <div>
-                        <motion.div 
+                        <motion.div
                            initial={{ opacity: 0, y: 10 }}
                            animate={{ opacity: 1, y: 0 }}
                            transition={{ delay: 0.1 }}
-                           className={`inline-block px-3 py-1 rounded mb-4 text-xs font-bold uppercase tracking-wide ${
-                            protocol.color === 'blue' ? 'bg-blue-900/30 text-blue-400' : 'bg-green-900/30 text-green-400'
-                        }`}>
+                           className={`inline-block px-3 py-1 rounded mb-4 text-xs font-bold uppercase tracking-wide ${protocolColor(protocol.color).badge}`}>
                             {protocol.subtitle}
                         </motion.div>
                         <h3 className="text-3xl font-bold text-white mb-4">{protocol.title}</h3>
@@ -98,9 +102,7 @@ const ProtocolsSection: React.FC = () => {
                                     className="bg-slate-800/50 p-4 rounded-lg border border-slate-700 hover:border-slate-500 transition-colors"
                                 >
                                     <div className="flex items-start gap-4">
-                                        <div className={`mt-1 p-2 rounded-md ${
-                                            protocol.color === 'blue' ? 'bg-blue-500/10 text-blue-400' : 'bg-green-500/10 text-green-400'
-                                        }`}>
+                                        <div className={`mt-1 p-2 rounded-md ${protocolColor(protocol.color).icon}`}>
                                             <MechIcon size={20} />
                                         </div>
                                         <div>
@@ -114,14 +116,17 @@ const ProtocolsSection: React.FC = () => {
                     </div>
 
                     {/* Right: Visual */}
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 }}
                         className="bg-slate-800 rounded-2xl p-8 border border-slate-700 h-full flex items-center justify-center relative overflow-hidden"
                         role="img"
-                        aria-label={protocol.id === 'roce' 
+                        aria-label={
+                            protocol.id === 'roce'
                             ? "Visual representation of RoCE traffic. Packets flow in a single ordered line from source to destination. A red 'PAUSE' indicator flashes, demonstrating Priority Flow Control blocking the path when congested."
+                            : protocol.id === 'load-balancing'
+                            ? "Visual representation of load balancing. Four paths are shown with different traffic volumes, illustrating ECMP, DLB, CLB and Packet Spraying distributing flows."
                             : "Visual representation of UET traffic. Green packets are sprayed across multiple paths simultaneously from source to destination, demonstrating high bandwidth utilization and out-of-order delivery."
                         }
                     >
@@ -150,6 +155,30 @@ const ProtocolsSection: React.FC = () => {
                                 <div className="w-16 h-16 bg-slate-700 rounded-lg flex items-center justify-center border-2 border-blue-500 z-10">
                                     <span className="text-xs text-white">Dest</span>
                                 </div>
+                             </div>
+                         ) : protocol.id === 'load-balancing' ? (
+                             <div className="relative w-full h-64 flex flex-col justify-center gap-3 px-8">
+                                 <div className="absolute inset-0 bg-purple-900/5 z-0"></div>
+                                 <div className="text-xs font-mono text-purple-400 uppercase mb-2 z-10">Path Utilization</div>
+                                 {[
+                                   { label: 'ECMP', pct: '72%', w: 'w-[72%]', note: 'hash collision risk' },
+                                   { label: 'DLB', pct: '95%', w: 'w-[95%]', note: 'rebalanced' },
+                                   { label: 'CLB', pct: '91%', w: 'w-[91%]', note: 'coordinated' },
+                                   { label: 'Spraying', pct: '99%', w: 'w-[99%]', note: 'all paths used' },
+                                 ].map((row, i) => (
+                                   <div key={i} className="flex items-center gap-3 z-10">
+                                     <span className="text-xs font-mono text-slate-400 w-16 shrink-0">{row.label}</span>
+                                     <div className="flex-1 h-4 bg-slate-700 rounded-full overflow-hidden">
+                                       <div
+                                         className="h-full bg-purple-500/70 rounded-full relative overflow-hidden"
+                                         style={{ width: row.pct }}
+                                       >
+                                         <div className="absolute inset-0 animate-[moveRight_2s_linear_infinite] w-1/4 bg-purple-300/20 blur-sm" style={{ animationDelay: `${i * 0.3}s` }}></div>
+                                       </div>
+                                     </div>
+                                     <span className="text-xs text-slate-500 w-24 shrink-0">{row.note}</span>
+                                   </div>
+                                 ))}
                              </div>
                          ) : (
                              <div className="relative w-full h-64 flex items-center justify-between px-8">

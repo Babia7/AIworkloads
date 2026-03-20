@@ -1,12 +1,17 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { MODULE_REGISTRY } from '../app/moduleRegistry';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { smoothScrollTo } from '../utils/scroll';
 
 const TableOfContents: React.FC = () => {
-  const tocItems = MODULE_REGISTRY.filter((item) => item.tocVisible).sort(
-    (a, b) => a.order - b.order
-  );
+  const { pathname } = useLocation();
+  const currentPage = pathname === '/operations' ? 'operations' : 'main';
+
+  const tocItems = MODULE_REGISTRY.filter(
+    (item) => item.tocVisible && item.page === currentPage
+  ).sort((a, b) => a.order - b.order);
+
   const navIds = tocItems.map((item) => item.anchorId);
   const activeId = useActiveSection(navIds);
 

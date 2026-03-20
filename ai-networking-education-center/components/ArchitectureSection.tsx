@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { useData } from '../contexts/DataContext';
-import { ICON_MAP } from '../constants';
-import { Layers, Server, GitMerge, ArrowRight } from 'lucide-react';
+import { ICON_MAP, TOPOLOGY_SELECTION } from '../constants';
+import { Layers, Server, GitMerge, ArrowRight, ChevronRight } from 'lucide-react';
 import GlossaryTerm from './GlossaryTerm';
 import SourceBadge from './SourceBadge';
 import { claimText, hasSourceMetadata } from '../utils/sourceClaims';
@@ -50,6 +50,34 @@ const ArchitectureSection: React.FC = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Topology Selection Decision Tree */}
+        <div className="mb-24">
+          <div className="mb-10">
+            <div className="text-blue-500 font-mono text-xs uppercase tracking-widest mb-4">Decision Framework</div>
+            <h3 className="text-2xl font-bold text-white mb-3">Topology Selection Guide</h3>
+            <p className="text-slate-400 max-w-2xl text-sm">
+              Choose your AI fabric topology based on GPU count and growth trajectory. Each branch maps to proven Arista hardware.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
+            {TOPOLOGY_SELECTION.map((branch, idx) => (
+              <div key={idx} className="bg-[#161b22] border border-white/5 rounded-2xl p-6 hover:border-blue-500/30 transition-all group flex flex-col gap-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full bg-blue-500/20 border border-blue-500/40 flex items-center justify-center shrink-0 mt-0.5">
+                    <ChevronRight size={14} className="text-blue-400" />
+                  </div>
+                  <span className="text-blue-300 font-bold text-sm">{branch.condition}</span>
+                </div>
+                <p className="text-slate-400 text-sm leading-relaxed">{branch.recommendation}</p>
+                <div className="mt-auto pt-3 border-t border-white/5">
+                  <div className="text-xs font-mono text-slate-500 uppercase mb-1">Recommended</div>
+                  <div className="text-xs text-slate-300 font-mono">{branch.platforms}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Visual: The Traffic Shift */}

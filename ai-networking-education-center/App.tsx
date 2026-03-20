@@ -1,66 +1,28 @@
-import React, { Suspense, useState } from 'react';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { DataProvider } from './contexts/DataContext';
-import Navigation from './components/Navigation';
-import HomeDashboard from './components/HomeDashboard';
-import TableOfContents from './components/TableOfContents';
-import Footer from './components/Footer';
-import FadeIn from './components/FadeIn';
-import AdminDashboard from './components/AdminDashboard';
 import ErrorBoundary from './components/ErrorBoundary';
-import { MODULE_REGISTRY } from './app/moduleRegistry';
-
-/**
- * AppContent
- *
- * The main layout container.
- * - Manages the visibility of the Admin Dashboard.
- * - Composes the page sections wrapped in FadeIn animations.
- * - Renders global navigation (Dock + TOC) and Footer.
- */
-const AppContent: React.FC = () => {
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
-
-  return (
-    <div className="min-h-screen bg-[#0F1117] text-slate-100 selection:bg-blue-500/30 pb-32">
-      {/* Global Navigation Elements */}
-      <Navigation />
-      <TableOfContents />
-
-      <main>
-        {/* Interactive Bento-Grid Dashboard */}
-        <HomeDashboard />
-
-        {/* Educational Modules (Scrollable) */}
-        {MODULE_REGISTRY.map(({ id, component: SectionComponent }) => (
-          <FadeIn key={id}>
-            <Suspense
-              fallback={<div className="container mx-auto px-6 py-10 text-sm text-slate-500">Loading section...</div>}
-            >
-              <SectionComponent />
-            </Suspense>
-          </FadeIn>
-        ))}
-      </main>
-
-      {/* Footer & Admin Triggers */}
-      <Footer onAdminClick={() => setIsAdminOpen(true)} />
-      <AdminDashboard isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
-    </div>
-  );
-};
+import MainPage from './pages/MainPage';
+import OperationsPage from './pages/OperationsPage';
 
 /**
  * Root App Component
  *
- * Wraps the application in the DataProvider to expose the
- * "Client-Side CMS" capabilities (dynamic content editing).
- * Now wrapped in ErrorBoundary to catch crashes.
+ * Wraps the application in ErrorBoundary, DataProvider, and BrowserRouter.
+ * Routes split the app into two pages:
+ *   "/" — main scrollable page (all modules except operations)
+ *   "/operations" — standalone Operations Playbooks page
  */
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <DataProvider>
-        <AppContent />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/operations" element={<OperationsPage />} />
+          </Routes>
+        </BrowserRouter>
       </DataProvider>
     </ErrorBoundary>
   );

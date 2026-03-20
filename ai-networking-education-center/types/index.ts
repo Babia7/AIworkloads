@@ -7,7 +7,9 @@ export type {
   ConceptData, ScalingConcept,
   ComparisonRow,
   ProtocolMechanism, ProtocolConcept,
-  HPCItem,
+  HPCItem, ValidationTest, ValidationPhase,
+  TopologyBranch,
+  CongestionStep,
   FutureItem, FutureCategory,
   RunbookTelemetryItem, OperationsRunbook,
 } from './content';

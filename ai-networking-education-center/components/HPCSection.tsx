@@ -1,8 +1,8 @@
-import React from 'react';
-import { Share2, Grid, Clock, AlertTriangle, Zap, Network, GitGraph, Activity } from 'lucide-react';
+import React, { useState } from 'react';
+import { Share2, Grid, Clock, AlertTriangle, Zap, Network, GitGraph, Activity, CheckCircle2 } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
 import type { HPCItem } from '../types';
-import { ICON_MAP } from '../constants';
+import { ICON_MAP, VALIDATION_PHASES } from '../constants';
 import SourceBadge from './SourceBadge';
 import { claimText, hasSourceMetadata } from '../utils/sourceClaims';
 
@@ -379,6 +379,43 @@ const HPCSection: React.FC = () => {
                 </li>
               </ul>
             </div>
+          </div>
+        </div>
+
+        {/* POC Validation Workflow */}
+        <div className="mb-24">
+          <div className="mb-10">
+            <div className="text-emerald-500 font-mono text-xs uppercase tracking-widest mb-4">POC Validation Procedure</div>
+            <h3 className="text-2xl font-bold text-white mb-3">AI Fabric Validation — 3-Phase Workflow</h3>
+            <p className="text-slate-400 max-w-2xl text-sm">
+              A structured 15-day procedure for validating AI fabric readiness. Run all tests in order — each phase gates the next.
+            </p>
+          </div>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {VALIDATION_PHASES.map((phase) => (
+              <div key={phase.phase} className="bg-[#161b22] rounded-2xl border border-white/5 overflow-hidden">
+                <div className="p-5 border-b border-white/5 flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0">
+                    <span className="text-emerald-400 font-bold text-sm">{phase.phase}</span>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-sm">{phase.title}</h4>
+                    <span className="text-xs text-slate-500 font-mono">{phase.days}</span>
+                  </div>
+                </div>
+                <ul className="p-5 space-y-3">
+                  {phase.tests.map((test) => (
+                    <li key={test.testId} className="flex items-start gap-3 text-sm text-slate-400">
+                      <CheckCircle2 size={14} className="text-slate-600 mt-0.5 shrink-0" />
+                      <span>
+                        <span className="text-slate-600 font-mono text-xs mr-2">{test.testId}</span>
+                        {test.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 

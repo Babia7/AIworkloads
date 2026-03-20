@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { useData } from '../contexts/DataContext';
 import { ChevronRight, Info, Server, ExternalLink } from 'lucide-react';
 import { ICON_MAP } from '../constants';
@@ -47,9 +47,71 @@ const DescriptionRenderer: React.FC<{ text: string }> = ({ text }) => {
   );
 };
 
+interface ProductTip {
+  title: string;
+  body: ReactNode;
+}
+
+const PRODUCT_TIPS: Record<string, ProductTip> = {
+  '7060X': {
+    title: 'Why LPO?',
+    body: (
+      <>
+        <GlossaryTerm term="LPO">Linear Pluggable Optics</GlossaryTerm> remove the DSP from
+        transceiver modules, cutting power per port by up to 15%. On a 64-port 800G leaf, that
+        adds up to kilowatts of savings at the rack level.
+      </>
+    ),
+  },
+  '7800R': {
+    title: 'Why VOQ?',
+    body: (
+      <>
+        <GlossaryTerm term="VOQ">Virtual Output Queuing</GlossaryTerm> eliminates{' '}
+        <GlossaryTerm term="Head-of-Line Blocking">head-of-line blocking</GlossaryTerm> by
+        buffering packets at ingress sorted by destination. Essential for{' '}
+        <GlossaryTerm term="Incast">incast</GlossaryTerm>-heavy AI collectives.
+      </>
+    ),
+  },
+  '7700R': {
+    title: 'Why Single Hop?',
+    body: (
+      <>
+        Single-hop removes the spine tier entirely. Any GPU can reach any other GPU in one switch
+        traversal — minimizing{' '}
+        <GlossaryTerm term="Tail Latency">tail latency</GlossaryTerm> and simplifying fabric
+        management at ultra-large scale.
+      </>
+    ),
+  },
+  '7280R3': {
+    title: 'Why Deep Buffers?',
+    body: (
+      <>
+        AI traffic consists of "<GlossaryTerm term="Incast">incast</GlossaryTerm>" bursts.
+        Shallow buffer switches drop packets during these microbursts.{' '}
+        <GlossaryTerm term="Deep Buffers">Deep buffers</GlossaryTerm> (
+        <GlossaryTerm term="VOQ">VOQ</GlossaryTerm>) absorb them.
+      </>
+    ),
+  },
+  '7280R3A': {
+    title: 'Why In-Band Telemetry?',
+    body: (
+      <>
+        In-Band Network Telemetry embeds timing and queue-depth metadata into live data packets.
+        This gives per-flow, per-hop visibility without dedicated probes — critical for diagnosing{' '}
+        <GlossaryTerm term="Microburst">microburst</GlossaryTerm> events in AI storage fabrics.
+      </>
+    ),
+  },
+};
+
 const HardwareSection: React.FC = () => {
   const { products } = useData();
   const [activeProduct, setActiveProduct] = useState(products[0]);
+  const [panelVisible, setPanelVisible] = useState(true);
 
   // Update active product if data changes (e.g. from Admin edit)
   useEffect(() => {
@@ -62,9 +124,17 @@ const HardwareSection: React.FC = () => {
     }
   }, [products]);
 
+  // Fade the spec sheet when switching products
+  useEffect(() => {
+    setPanelVisible(false);
+    const t = setTimeout(() => setPanelVisible(true), 50);
+    return () => clearTimeout(t);
+  }, [activeProduct?.id]);
+
   if (!activeProduct) return null;
 
   const ProductIcon = ICON_MAP[activeProduct.iconKey] || Server;
+  const tip = PRODUCT_TIPS[activeProduct.id];
 
   return (
     <section id="hardware" className="py-32 bg-[#0F1117] border-t border-white/5">
@@ -112,22 +182,24 @@ const HardwareSection: React.FC = () => {
               </button>
             ))}
 
-            {/* Spec Hint */}
+            {/* Contextual Info Card */}
             <div className="mt-8 p-4 bg-[#161b22] border border-white/5 rounded-lg">
               <div className="flex items-center gap-2 text-slate-400 mb-2">
                 <Info size={14} />
-                <span className="text-xs font-bold uppercase">Why Deep Buffers?</span>
+                <span className="text-xs font-bold uppercase">
+                  {tip ? tip.title : 'Platform Note'}
+                </span>
               </div>
               <p className="text-xs text-slate-500 leading-relaxed">
-                AI traffic consists of "<GlossaryTerm term="Incast">incast</GlossaryTerm>" bursts.
-                Shallow buffer switches drop packets during these microbursts. Deep buffers (
-                <GlossaryTerm term="VOQ">VOQ</GlossaryTerm>) absorb them.
+                {tip ? tip.body : activeProduct.role}
               </p>
             </div>
           </div>
 
           {/* Main Spec Sheet Display */}
-          <div className="flex-1 bg-[#161b22] rounded-2xl border border-white/5 p-8 relative overflow-hidden flex flex-col">
+          <div
+            className={`flex-1 bg-[#161b22] rounded-2xl border border-white/5 p-8 relative overflow-hidden flex flex-col transition-opacity duration-200 ${panelVisible ? 'opacity-100' : 'opacity-0'}`}
+          >
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/5 pb-8 mb-8 gap-4">
               <div>
@@ -137,10 +209,20 @@ const HardwareSection: React.FC = () => {
                   </div>
                   <h3 className="text-3xl font-bold text-white">{activeProduct.series}</h3>
                 </div>
-                <div className="text-cyan-500 font-mono text-sm">{activeProduct.role}</div>
+                <div className="flex items-center gap-2">
+                  <div className="text-cyan-500 font-mono text-sm">{activeProduct.role}</div>
+                  {activeProduct.scale && (
+                    <>
+                      <span className="text-slate-700">·</span>
+                      <span className="text-slate-500 font-mono text-xs">
+                        {activeProduct.scale}
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
-              <div className="flex gap-2">
-                {activeProduct.specs.slice(0, 2).map((spec, i) => (
+              <div className="flex flex-wrap gap-2">
+                {activeProduct.specs.map((spec, i) => (
                   <div
                     key={i}
                     className="flex items-center gap-2 px-3 py-1 bg-[#0d1117] border border-white/10 rounded text-xs text-slate-300 font-mono"
@@ -190,6 +272,39 @@ const HardwareSection: React.FC = () => {
                   )}
                 </div>
 
+                {/* Key Features Metric Cards */}
+                {activeProduct.keyFeatures && activeProduct.keyFeatures.length > 0 && (
+                  <div>
+                    <h4 className="text-slate-500 font-mono text-xs uppercase tracking-wider mb-4">
+                      Key Features
+                    </h4>
+                    <div className="grid grid-cols-3 gap-3">
+                      {activeProduct.keyFeatures.map((feature, i) => {
+                        const FeatureIcon = feature.iconKey ? ICON_MAP[feature.iconKey] : null;
+                        return (
+                          <div
+                            key={i}
+                            className="bg-[#0d1117] border border-white/5 border-t-2 border-t-cyan-500/30 rounded-lg p-3"
+                          >
+                            {FeatureIcon && (
+                              <FeatureIcon size={14} className="text-cyan-400 mb-2" />
+                            )}
+                            <div className="text-xs text-slate-500 font-mono mb-1">
+                              {feature.label}
+                            </div>
+                            <div className="text-sm font-bold text-white font-mono">
+                              {claimText(feature.value)}
+                            </div>
+                            <div className="text-xs text-slate-600 mt-1 leading-tight">
+                              {claimText(feature.subtext)}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
                 {activeProduct.variants && (
                   <div>
                     <h4 className="text-slate-500 font-mono text-xs uppercase tracking-wider mb-4">
@@ -214,6 +329,8 @@ const HardwareSection: React.FC = () => {
                             >
                               {claimText(v.ports)}
                             </span>
+                            <span className="w-px h-4 bg-slate-800"></span>
+                            <span className="text-slate-600">{v.formFactor}</span>
                           </div>
                         </div>
                       ))}

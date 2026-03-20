@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Play, Pause, RotateCcw, Zap, ArrowLeft, ArrowRight, AlertTriangle } from 'lucide-react';
+import { Play, Pause, RotateCcw, Zap, ArrowLeft, ArrowRight, AlertTriangle, ChevronRight } from 'lucide-react';
 import GlossaryTerm from './GlossaryTerm';
 import { useProtocolSimulation } from '../hooks/useProtocolSimulation';
+import { CONGESTION_PROCEDURE } from '../constants';
 
 const ProtocolDeepDive: React.FC = () => {
   const { 
@@ -216,6 +217,45 @@ const ProtocolDeepDive: React.FC = () => {
                 </div>
             </div>
 
+        </div>
+      </div>
+
+      {/* Congestion Design Procedure */}
+      <div className="container mx-auto px-6 mt-16">
+        <div className="mb-10">
+          <div className="text-purple-500 font-mono text-xs uppercase tracking-widest mb-4">Design Procedure</div>
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">RoCEv2 Congestion Tuning — 5 Steps</h3>
+          <p className="text-slate-400 max-w-2xl">
+            Apply these steps in order when deploying or tuning a RoCEv2 AI fabric. Each step depends on the workload classification from Step 1.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-5 gap-4">
+          {CONGESTION_PROCEDURE.map((step, idx) => (
+            <div key={step.step} className="relative">
+              {idx < CONGESTION_PROCEDURE.length - 1 && (
+                <div className="hidden md:flex absolute top-6 right-0 translate-x-1/2 z-10 text-slate-600">
+                  <ChevronRight size={16} />
+                </div>
+              )}
+              <div className="bg-[#161b22] rounded-xl border border-white/5 p-5 hover:border-purple-500/30 transition-colors h-full">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-7 h-7 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center shrink-0">
+                    <span className="text-purple-400 font-bold text-xs">{step.step}</span>
+                  </div>
+                  <h4 className="text-white font-bold text-sm">{step.title}</h4>
+                </div>
+                <ul className="space-y-2">
+                  {step.details.map((detail, i) => (
+                    <li key={i} className="text-xs text-slate-400 flex items-start gap-2">
+                      <span className="text-purple-500 mt-1 shrink-0">›</span>
+                      <span>{detail}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

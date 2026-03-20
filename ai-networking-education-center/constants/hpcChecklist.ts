@@ -1,4 +1,4 @@
-import { HPCItem } from '../types';
+import { HPCItem, ValidationPhase } from '../types';
 import { claim } from '../utils/sourceClaims';
 import { claimTextById } from '../content/claims/performanceClaims';
 
@@ -8,6 +8,52 @@ const AI_NETWORKING_SOURCE = {
   sourceRevisionOrDate: 'Accessed 2026-03',
   verificationStatus: 'vendor-claim' as const,
 };
+
+export const VALIDATION_PHASES: ValidationPhase[] = [
+  {
+    phase: 1,
+    title: 'Infrastructure Baseline',
+    days: 'Days 1–3',
+    tests: [
+      { testId: 'P1-01', name: 'BGP sessions established and stable' },
+      { testId: 'P1-02', name: 'Route table correctness verified' },
+      { testId: 'P1-03', name: 'QoS class mapping confirmed' },
+      { testId: 'P1-04', name: 'PFC pause counters at baseline' },
+      { testId: 'P1-05', name: 'LANZ telemetry active and streaming' },
+      { testId: 'P1-06', name: 'CloudVision device visibility confirmed' },
+      { testId: 'P1-07', name: 'ECN marking fires at test load' },
+      { testId: 'P1-08', name: 'MTU end-to-end verified (9214 bytes)' },
+    ],
+  },
+  {
+    phase: 2,
+    title: 'Congestion and Balancing',
+    days: 'Days 4–10',
+    tests: [
+      { testId: 'P2-01', name: 'Hash distribution across ECMP paths' },
+      { testId: 'P2-02', name: 'DLB rebalancing under sustained flow' },
+      { testId: 'P2-03', name: 'CLB spine coordination (multi-agent)' },
+      { testId: 'P2-04', name: 'Congestion isolation at leaf level' },
+      { testId: 'P2-05', name: 'Congestion isolation at spine level' },
+      { testId: 'P2-06', name: 'PFC watchdog trigger behavior' },
+      { testId: 'P2-07', name: 'DCQCN rate reduction verification' },
+      { testId: 'P2-08', name: 'Packet Spraying path variance' },
+      { testId: 'P2-09', name: 'JCT measurement baseline established' },
+    ],
+  },
+  {
+    phase: 3,
+    title: 'Failure and Recovery',
+    days: 'Days 11–15',
+    tests: [
+      { testId: 'P3-01', name: 'Link flap recovery time' },
+      { testId: 'P3-02', name: 'Leaf reload convergence' },
+      { testId: 'P3-03', name: 'Spine reload traffic reroute' },
+      { testId: 'P3-04', name: 'Storage burst isolation from compute traffic' },
+      { testId: 'P3-05', name: 'Best-effort burst impact on RoCEv2 queue' },
+    ],
+  },
+];
 
 export const HPC_CHECKLIST_DEFAULT: HPCItem[] = [
   {

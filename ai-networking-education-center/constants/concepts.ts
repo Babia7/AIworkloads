@@ -1,4 +1,4 @@
-import { ConceptData, ScalingConcept } from '../types';
+import { ConceptData, ScalingConcept, TopologyBranch } from '../types';
 import { claim } from '../utils/sourceClaims';
 
 const RDMA_SOURCE = {
@@ -50,6 +50,29 @@ export const SCALING_CONCEPTS: ScalingConcept[] = [
     desc: claim('Between Buildings', ARISTA_AI_GUIDE_SOURCE),
     details: claim('Connecting geographically distributed AI centers (DCI) with encryption.', ARISTA_AI_GUIDE_SOURCE),
     iconKey: 'Globe',
+  },
+];
+
+export const TOPOLOGY_SELECTION: TopologyBranch[] = [
+  {
+    condition: '≤1,024 GPUs',
+    recommendation: '2-tier Clos, dual-plane, fixed switches, DLB on leaf',
+    platforms: '7060X leaf + 7060X spine',
+  },
+  {
+    condition: '1,024–4,096 GPUs',
+    recommendation: 'Multi-plane, 2-tier Clos, DLB on leaf + CLB on spine',
+    platforms: '7060X leaf + 7800R spine',
+  },
+  {
+    condition: '>4,096 GPUs or cross-hall',
+    recommendation: '3-tier Clos with super-spine, inter-hall fiber allocation',
+    platforms: '7060X leaf + 7800R spine + 7700R DES super-spine',
+  },
+  {
+    condition: 'Uncertain scale / budget-staged',
+    recommendation: 'Modular GPU pods, start 2-tier, plan for multi-plane expansion',
+    platforms: '7060X leaf + 7800R modular spine',
   },
 ];
 

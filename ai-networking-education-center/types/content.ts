@@ -120,6 +120,34 @@ export interface OperationsRunbook {
   actions: string[];
 }
 
+/** Single test within a POC validation phase */
+export interface ValidationTest {
+  testId: string;
+  name: string;
+}
+
+/** Phase in the AI Fabric POC Validation Procedure */
+export interface ValidationPhase {
+  phase: number;
+  title: string;
+  days: string;
+  tests: ValidationTest[];
+}
+
+/** Branch in the topology selection decision tree */
+export interface TopologyBranch {
+  condition: string;
+  recommendation: string;
+  platforms: string;
+}
+
+/** Single step in the RoCEv2 congestion design procedure */
+export interface CongestionStep {
+  step: number;
+  title: string;
+  details: string[];
+}
+
 /** Individual roadmap improvement item */
 export interface FutureItem {
   title: string;
